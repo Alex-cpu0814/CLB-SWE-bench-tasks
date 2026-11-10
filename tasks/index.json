@@ -507,8 +507,8 @@
       "cohort": "python50",
       "base_commit": "0589ca062fa624f4bf2a9ebea7aedb2a08b37780",
       "image": {
-        "image_id": "sha256:09531e41aa8f9ff6c8dfe158e64846c0c11ff89f568409e474c6be948578392b",
-        "pull_reference": "yutu0814/pyc-case-075-pygame@sha256:09531e41aa8f9ff6c8dfe158e64846c0c11ff89f568409e474c6be948578392b"
+        "image_id": "sha256:7b465322ad5678d225697bb7e633a00a47d91702620bf5547e386c627d04d3fe",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-pyc-075@sha256:7b465322ad5678d225697bb7e633a00a47d91702620bf5547e386c627d04d3fe"
       },
       "generation_python": "python",
       "task": {
@@ -609,8 +609,8 @@
       "cohort": "python50",
       "base_commit": "6e5ca4a046fde6c21b0386281e25a83b3c8f9ba3",
       "image": {
-        "image_id": "sha256:150ec56758ae844eb1b5e23a435ebd2c0bd9b72b55416b8a5cfa417ed7bb1df4",
-        "pull_reference": "yutu0814/pyc-case-090-pygame@sha256:150ec56758ae844eb1b5e23a435ebd2c0bd9b72b55416b8a5cfa417ed7bb1df4"
+        "image_id": "sha256:0885aad791f682a1089d444fe3922271eaeeeae285708c62c2a46505c77b5d08",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-pyc-090@sha256:0885aad791f682a1089d444fe3922271eaeeeae285708c62c2a46505c77b5d08"
       },
       "generation_python": "python",
       "task": {
@@ -626,8 +626,8 @@
       "cohort": "python50",
       "base_commit": "e26f569b1f3e28d935327b7dfc4cb10e722a9d09",
       "image": {
-        "image_id": "sha256:f416079adbe2fdc2542d0842b9d09f7f0b4fab0032a8de19fd08abd9b93b2777",
-        "pull_reference": "yutu0814/pyc-case-091-pygame@sha256:f416079adbe2fdc2542d0842b9d09f7f0b4fab0032a8de19fd08abd9b93b2777"
+        "image_id": "sha256:5ee498265139a4da765c6383ccaf11bed389557c29b1094c6dc8cc8c6141a931",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-pyc-091@sha256:5ee498265139a4da765c6383ccaf11bed389557c29b1094c6dc8cc8c6141a931"
       },
       "generation_python": "python",
       "task": {

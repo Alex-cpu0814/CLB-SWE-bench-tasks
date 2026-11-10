@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/pygame/pygame.git",
   "base_commit": "6e5ca4a046fde6c21b0386281e25a83b3c8f9ba3",
   "fix_commit": "4c23a6ce02e4fa25ee62ba3d996106dcfd7d3cd4",
-  "image": "yutu0814/pyc-case-090-pygame:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-pyc-090@sha256:0885aad791f682a1089d444fe3922271eaeeeae285708c62c2a46505c77b5d08",
   "python_version": "3.8",
   "numpy_version": "not required",
   "extra_apt_packages": [],
