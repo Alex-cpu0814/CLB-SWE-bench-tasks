@@ -19,7 +19,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case002.json",
+        "path": "clb-pyc-002/task.json",
         "sha256": "b8b4a96a29cea3bdccfb94a36e84bc0ff6b750fc8859fcef61da3d23908311cf"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -36,7 +36,7 @@
       },
       "generation_python": "python3.8-dbg",
       "task": {
-        "path": "cases/case007.json",
+        "path": "clb-pyc-007/task.json",
         "sha256": "0b79e802d6ab0efe38b860a3c5a92cd35ce683df0e7c17344e4e5805f1ede089"
       },
       "statement_version": "retained_pending_source_review",
@@ -53,7 +53,7 @@
       },
       "generation_python": "python3.8-dbg",
       "task": {
-        "path": "cases/case010.json",
+        "path": "clb-pyc-010/task.json",
         "sha256": "06bc69a6c5b885ff37b14feb39767bcbcfaede1f94f38df22216eb71b14ba21f"
       },
       "statement_version": "retained_pending_source_review",
@@ -70,7 +70,7 @@
       },
       "generation_python": "python3.8-dbg",
       "task": {
-        "path": "cases/case011.json",
+        "path": "clb-pyc-011/task.json",
         "sha256": "99d31e4061738bb350a0ac985a1be0b434ea4cc41c8e81151574be1c1def5b97"
       },
       "statement_version": "retained_pending_source_review",
@@ -87,7 +87,7 @@
       },
       "generation_python": "python3.8-dbg",
       "task": {
-        "path": "cases/case013.json",
+        "path": "clb-pyc-013/task.json",
         "sha256": "fa50577130d6957659183a691b2b86b1ba80b1d54b8b14e0bdc01d9524bfaf77"
       },
       "statement_version": "retained_pending_source_review",
@@ -104,7 +104,7 @@
       },
       "generation_python": "python3.8-dbg",
       "task": {
-        "path": "cases/case014.json",
+        "path": "clb-pyc-014/task.json",
         "sha256": "aea7f169b75b22981de552d0f050337d61f724227efd3a726ab55ae284a38208"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -121,7 +121,7 @@
       },
       "generation_python": "python3.8-dbg",
       "task": {
-        "path": "cases/case015.json",
+        "path": "clb-pyc-015/task.json",
         "sha256": "748a6bbc7f7ef6661fd40c661c0df792e0dbf758912027c306d5056d6c418faa"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -138,7 +138,7 @@
       },
       "generation_python": "python3.8-dbg",
       "task": {
-        "path": "cases/case022.json",
+        "path": "clb-pyc-022/task.json",
         "sha256": "975490542d4c938dfc5b86184291f621d783c5b27701ce200c36d3cc6ff18bd5"
       },
       "statement_version": "retained_pending_source_review",
@@ -155,7 +155,7 @@
       },
       "generation_python": "python3.8-dbg",
       "task": {
-        "path": "cases/case023.json",
+        "path": "clb-pyc-023/task.json",
         "sha256": "32b5cb98ad336d8ff7189875f66a4ddf423df37de9f6882d6eeac1a14cc79f75"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -172,7 +172,7 @@
       },
       "generation_python": "python3.8-dbg",
       "task": {
-        "path": "cases/case027.json",
+        "path": "clb-pyc-027/task.json",
         "sha256": "e6223a21fed8cc1e38d75678ae4d86692156fc1c655367f69627ead18961e0d7"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -189,7 +189,7 @@
       },
       "generation_python": "python2.7",
       "task": {
-        "path": "cases/case031.json",
+        "path": "clb-pyc-031/task.json",
         "sha256": "7373c2ebb562d5a9672f1ef7fb8b30b137977db9d0d32670b2a1506a7a1724d2"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -206,7 +206,7 @@
       },
       "generation_python": "python3.8",
       "task": {
-        "path": "cases/case034.json",
+        "path": "clb-pyc-034/task.json",
         "sha256": "1bd88864e0def77cf3e285bc39b52d4a5c977eddcb6b2719a29ea733810d5f20"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -223,7 +223,7 @@
       },
       "generation_python": "python3.8",
       "task": {
-        "path": "cases/case037.json",
+        "path": "clb-pyc-037/task.json",
         "sha256": "269c088a75f76a8eb28d544e0807ec7b0c6a8c3005fe7b69b8584e2c783bd85f"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -240,7 +240,7 @@
       },
       "generation_python": "python3.8",
       "task": {
-        "path": "cases/case041.json",
+        "path": "clb-pyc-041/task.json",
         "sha256": "c025e4e3bb9fec89be48fa3b3ffefa200fdf9272d764048c019addf289ec64f3"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -257,7 +257,7 @@
       },
       "generation_python": "python3.8",
       "task": {
-        "path": "cases/case042.json",
+        "path": "clb-pyc-042/task.json",
         "sha256": "4743aa677458d619915dcd264b62754fe6a7e2085ccd4425f19d16c25f5a65ce"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -274,7 +274,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case044.json",
+        "path": "clb-pyc-044/task.json",
         "sha256": "b1abcea94a344a928d86d68a2b377b51a85233e9bf0f18cab28ba3739ce5ee13"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -291,7 +291,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case046.json",
+        "path": "clb-pyc-046/task.json",
         "sha256": "1a5ef92674d936ca27a78e570b357facfc29375294dcab6ff8615e768665064b"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -308,7 +308,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case048.json",
+        "path": "clb-pyc-048/task.json",
         "sha256": "b513c5054838366700454bc603465f09b96d7e86b6f09f4527d7f417cbef15d5"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -325,7 +325,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case049.json",
+        "path": "clb-pyc-049/task.json",
         "sha256": "562c58471542af7d33ec4e9d13c0aa000e662e08ef51d5117afcc29e66a604c6"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -342,7 +342,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case053.json",
+        "path": "clb-pyc-053/task.json",
         "sha256": "e296ca0fbfa37342a2c61da72159a3cfede5e1ab4be3715d5d58b873f12f5604"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -359,7 +359,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case054.json",
+        "path": "clb-pyc-054/task.json",
         "sha256": "92a222a79eaee500ea5c762f9639a694141d86bfd41417595819045a903c6e91"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -376,7 +376,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case056.json",
+        "path": "clb-pyc-056/task.json",
         "sha256": "695259fbe0af115ffb507e2a1410a29b0141fa975ed1c0297ea11a7cbd73ae76"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -393,7 +393,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case057.json",
+        "path": "clb-pyc-057/task.json",
         "sha256": "cbad89acb34e0f61042cefb4061fb072df71a34038f2f167e46f9c0445c5462f"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -410,7 +410,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case058.json",
+        "path": "clb-pyc-058/task.json",
         "sha256": "3966cd4f2253821860564d34128595a3154ccaafbbc4acae7392796ffd879e66"
       },
       "statement_version": "retained_pending_source_review",
@@ -427,7 +427,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case060.json",
+        "path": "clb-pyc-060/task.json",
         "sha256": "dec4d5c6c1a7bb83cb95e74def77ba0ebf886ac12e211d68aac10476e8cc3b9d"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -444,7 +444,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case066.json",
+        "path": "clb-pyc-066/task.json",
         "sha256": "83c2a49472d3feb1c31aa308d71aec1e40d34d7610decb276120e6bdf033d7e5"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -461,7 +461,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case068.json",
+        "path": "clb-pyc-068/task.json",
         "sha256": "37c13d2d0d4624d6ba3e41f034b04621a56f7bca3aa624b12372f62dfc6152a6"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -478,7 +478,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case070.json",
+        "path": "clb-pyc-070/task.json",
         "sha256": "d11e9ecc04f7e1b04895aadf4803630d75ec7270e6e133eca5160e71f9e027c1"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -495,7 +495,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case071.json",
+        "path": "clb-pyc-071/task.json",
         "sha256": "b9aa4a72d7d25d5009d0cc93ab6d0f0c29f8a5ae72dd79c6e7f6c8086f6ed1f0"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -512,7 +512,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case075.json",
+        "path": "clb-pyc-075/task.json",
         "sha256": "10e2e7b0c40d8d810c8d6664d2520d9e794509327fd756d85a1e59e1e28cc181"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -529,7 +529,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case077.json",
+        "path": "clb-pyc-077/task.json",
         "sha256": "2d4fd5445128f8258e0f8b5048b8ba587ffdf7a80cbfb0bba8abbfec9f93cb4a"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -546,7 +546,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case081.json",
+        "path": "clb-pyc-081/task.json",
         "sha256": "fd8d8273010c0ea22a99a16c0d4360e76295a790ef65b6688671a420a02e0b9d"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -563,7 +563,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case082.json",
+        "path": "clb-pyc-082/task.json",
         "sha256": "ac7fcb60306584488260cfaa2339d63e1e8d66b62076869d92fce334a55cf680"
       },
       "statement_version": "retained_pending_source_review",
@@ -580,7 +580,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case086.json",
+        "path": "clb-pyc-086/task.json",
         "sha256": "5b2a94b041034e9b16b4ea709e9d4eb97d1f559b21636b6e1c97bb73b33fc33b"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -597,7 +597,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case088.json",
+        "path": "clb-pyc-088/task.json",
         "sha256": "3ff371cabac3e170cbdacf0971051811448e2def6294f3b20ef64d5c67b44b8b"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -614,7 +614,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case090.json",
+        "path": "clb-pyc-090/task.json",
         "sha256": "7f2841cff409c5f4db901f45169c30c8517bad709b619a515fb4a1a727a8e584"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -631,7 +631,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case091.json",
+        "path": "clb-pyc-091/task.json",
         "sha256": "3a8bd853f1b6fdea31ef4d8c3df220c7c6e836ffbdb28c9b316f250a3976ca64"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -648,7 +648,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case094.json",
+        "path": "clb-pyc-094/task.json",
         "sha256": "5adfe7a9ad5010eecf561812e608cee2ac59aa9085dda86c92670e7bc76f8a52"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -665,7 +665,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case137.json",
+        "path": "clb-pyc-137/task.json",
         "sha256": "4e4c4e4448b26be844322793160ed8801e773ef6236ec995895b9919b1880b5e"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -682,7 +682,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case138.json",
+        "path": "clb-pyc-138/task.json",
         "sha256": "e670944f07033f16c983654352fac357cdb91803e0c2effbf2e73f7754231dda"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -699,7 +699,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case139.json",
+        "path": "clb-pyc-139/task.json",
         "sha256": "b954ac52e6dcfe006169e990bb0f92b571825617eb480a37e095ffe370e2e930"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -716,7 +716,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case141.json",
+        "path": "clb-pyc-141/task.json",
         "sha256": "adfbe69187eddea04a7444458e97ed2def68332854f8a62165992e02557e5f6d"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -733,7 +733,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case142.json",
+        "path": "clb-pyc-142/task.json",
         "sha256": "f9ed41cdf003e190a2241dc13eb2f5d5924f7b6c327879454327763056d5b8b5"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -750,7 +750,7 @@
       },
       "generation_python": "python2.7",
       "task": {
-        "path": "cases/case156.json",
+        "path": "clb-pyc-156/task.json",
         "sha256": "4ab5799c36f5aa9db58f6827990b9d936b2bd10b4ca49ea1bb3930d01be44f93"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -767,7 +767,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case159.json",
+        "path": "clb-pyc-159/task.json",
         "sha256": "50ae5d283196d61b6e3a19e0a8744c3a790288859731cabe546f0109bad15b5b"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -784,7 +784,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case160.json",
+        "path": "clb-pyc-160/task.json",
         "sha256": "9096736e7a4da3b3fdc384c7b9db09bbc4c4a84d5b8d27288132996dc7703b82"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -801,7 +801,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case174.json",
+        "path": "clb-pyc-174/task.json",
         "sha256": "4a20a2a2130d100b1ec697798f18f2b8611c2cc9203e96bba79e581ab2c67eb7"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -818,7 +818,7 @@
       },
       "generation_python": "python",
       "task": {
-        "path": "cases/case175.json",
+        "path": "clb-pyc-175/task.json",
         "sha256": "728440af5f1451f3e3a560c58fdbf968cc917ca9dc25d6d645071f343c9570ab"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -835,7 +835,7 @@
       },
       "generation_python": "python2.7",
       "task": {
-        "path": "cases/case176.json",
+        "path": "clb-pyc-176/task.json",
         "sha256": "5c23ccd04fc6b6c73f128f04ac19655e0866b6e3cc180fbe145f15e8aa90c04b"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -852,7 +852,7 @@
       },
       "generation_python": "python2.7",
       "task": {
-        "path": "cases/case177.json",
+        "path": "clb-pyc-177/task.json",
         "sha256": "58759714d8825373499df1e88ff56ce2b0027b9dde48f9b17457ba56c71d5129"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -869,7 +869,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_056.json",
+        "path": "clb-javac-056/task.json",
         "sha256": "95e0ac3e2aeba734e4676f708af14bbec4b76a94488af22fc0cd14ad185d5320"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -886,7 +886,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_062.json",
+        "path": "clb-javac-062/task.json",
         "sha256": "5f757a53e2f8e3e1ce1343cb3b1eb65f6546dd3182eb03ad8fa52d3a03b015d8"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -903,7 +903,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_068.json",
+        "path": "clb-javac-068/task.json",
         "sha256": "50edc7a2bc51976540db4dfc6e00f1f770fd3b81f2b34553f967f957c4041b3c"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -920,7 +920,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_074.json",
+        "path": "clb-javac-074/task.json",
         "sha256": "f5dfa58abe140e72ac99e61c5344cb3f0c4eab5b686b6eca88371068d4a19c2e"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -938,7 +938,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_075.json",
+        "path": "clb-javac-075/task.json",
         "sha256": "7e57ff646553fd5d52e072ba6f1b41f3a05532a1878c8eb98e3938d24b64f95d"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -955,7 +955,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_093.json",
+        "path": "clb-javac-093/task.json",
         "sha256": "3ccbf9fa53734fe511af8ee74ffc9f5fd7e8d87f41d63190dddd1eaa8bb86036"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -972,7 +972,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_094.json",
+        "path": "clb-javac-094/task.json",
         "sha256": "f99acc1148b8d0bcc9dd7a1aaaa15b865f490a4e01197927f0065418b8132823"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -989,7 +989,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_097.json",
+        "path": "clb-javac-097/task.json",
         "sha256": "85eadcdae60d86dade451b071f5add6ee1dfff2ef9e4620d76610e5a042c3000"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1006,7 +1006,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_099.json",
+        "path": "clb-javac-099/task.json",
         "sha256": "4e1de29c36f73025a2bec14a58562ef7d9cbbf7084f7f3df4fff4fecb227d858"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1023,7 +1023,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_163.json",
+        "path": "clb-javac-163/task.json",
         "sha256": "2d1a3497dcc97c29ae4b52be1e170afaf4ad7b7f6ef3b016f62cc4b01562dc4a"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1040,7 +1040,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_170.json",
+        "path": "clb-javac-170/task.json",
         "sha256": "80125c137a5fb7778058ecb17224034dccd6a1b1c491f7c3f9b1d9a1f01389cb"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1058,7 +1058,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_069.json",
+        "path": "clb-javac-069/task.json",
         "sha256": "bbae1b445638b837b30521dcf612d06d84b1748c72f9b0d7acf39503b28d481a"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1075,7 +1075,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_092.json",
+        "path": "clb-javac-092/task.json",
         "sha256": "5b064c3bb03a64fc46b0d83215d1701905c93e5aa327cf5e8b33faf29b47e3ad"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1092,7 +1092,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_100.json",
+        "path": "clb-javac-100/task.json",
         "sha256": "20d87fe2d5d668fb51b1668d5fbab99b6c434b1a70b2d58c0d743a6e10c79f3b"
       },
       "statement_version": "retained_pending_source_review",
@@ -1109,7 +1109,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_112.json",
+        "path": "clb-javac-112/task.json",
         "sha256": "8999e6a3b54f37173f007e72325cfa828c9d47333383d63b4abb2921e2d7680e"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1126,7 +1126,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_150.json",
+        "path": "clb-javac-150/task.json",
         "sha256": "b862a8292a9370c812fe50ddfdf4eb72ae1c81e6eb4e4da8b2a40cb1085de57d"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1143,7 +1143,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_152.json",
+        "path": "clb-javac-152/task.json",
         "sha256": "c868d26793ab278b5a5a8906d0517a7700860c6ffcf1e17b557b6b693ea2aed5"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1160,7 +1160,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_160.json",
+        "path": "clb-javac-160/task.json",
         "sha256": "51683ecd45d7fb6af395d21a2c1f2636f02c88d447410833bbc3dadc96dfdc24"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1177,7 +1177,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_161.json",
+        "path": "clb-javac-161/task.json",
         "sha256": "aef25d1453bd53dc7dcf6fda0f31bafae57904e479cff598293d75388061f412"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1194,7 +1194,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_175.json",
+        "path": "clb-javac-175/task.json",
         "sha256": "7aac44a7365a0d695f540092a8ef86da638c3f472eaa0889db074faca44471a5"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1211,7 +1211,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_194.json",
+        "path": "clb-javac-194/task.json",
         "sha256": "3351527d1bada8821ecaed307df557cf40324bbcaa09831f6227c31c38c007c7"
       },
       "statement_version": "source_issue_restored_20261103",
@@ -1228,7 +1228,7 @@
       },
       "generation_python": "discover_image_default",
       "task": {
-        "path": "cases/javac_case_200.json",
+        "path": "clb-javac-200/task.json",
         "sha256": "c3abd2dcaa852e522b72e78504bdf89d5fa570603f3c535039393bdd47a1fced"
       },
       "statement_version": "source_issue_restored_20261103",

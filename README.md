@@ -2,7 +2,7 @@
 
 Task assets for the 72-task CLB SWE-bench release.
 
-- [tasks/](tasks/index.json) holds the task index, problem statements, Base commits, and pinned Docker image references.
+- [tasks/](tasks/index.json) holds the task index, Base commits, and pinned Docker image references. Each `tasks/<instance_id>/task.json` holds the public statement alongside its Dockerfile when a recipe is available.
 - [Rebuild the clb-pyc-086 image](tasks/clb-pyc-086/README.md) contains the Docker recipe and local verification steps for the pygame case.
 - [evaluation/](evaluation/index.json) holds the evaluation index, per-case scripts, Test Patches, and grading lists.
 - [gold/](gold/) holds the reference patch for each instance ID, exported byte for byte from the pinned Hugging Face dataset.
