@@ -1188,8 +1188,8 @@
       "cohort": "python50",
       "base_commit": "c09d677a6c1c2e814683576035f13c6a07d64f67",
       "image": {
-        "image_id": "sha256:9033751a383ee84641f989c2efc2da75bec96025e77dda11dd9736a992a9a912",
-        "pull_reference": "yutu0814/pyc-case-077-pygame@sha256:9033751a383ee84641f989c2efc2da75bec96025e77dda11dd9736a992a9a912"
+        "image_id": "sha256:7707b84c946a4597488097a8db50e6fa4732fd7612035c723cbd95d2e7a1103f",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-pyc-077@sha256:7707b84c946a4597488097a8db50e6fa4732fd7612035c723cbd95d2e7a1103f"
       },
       "files": [
         {
@@ -1198,7 +1198,7 @@
         },
         {
           "path": "cases/case077/evaluator/case_config.json",
-          "sha256": "5c59179d538c8d07866aa0e0e10a54324746f3c718957fd5edd1b875e5f77175"
+          "sha256": "05cfce1118a6dfe6e966690d16751e3bd22ddb7cfdee66143e39103ae4cd22be"
         },
         {
           "path": "cases/case077/evaluator/evaluate_model_patch.py",
@@ -1229,8 +1229,8 @@
       "cohort": "python50",
       "base_commit": "71c90cdb76cd8b12a0969f5d6314315bd0223c28",
       "image": {
-        "image_id": "sha256:4e5d69e396505fea954f28acb59dc90ef522bafab05dd484c0299e628f938720",
-        "pull_reference": "yutu0814/pyc-case-081-pygame@sha256:4e5d69e396505fea954f28acb59dc90ef522bafab05dd484c0299e628f938720"
+        "image_id": "sha256:05fb0b27f5330e9a842d9e3263020c214623933f2eb2cb590f2e95737f647457",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-pyc-081@sha256:05fb0b27f5330e9a842d9e3263020c214623933f2eb2cb590f2e95737f647457"
       },
       "files": [
         {
@@ -1239,7 +1239,7 @@
         },
         {
           "path": "cases/case081/evaluator/case_config.json",
-          "sha256": "0299680befed3f73d26d0126374bc418c8c69f7ab417a04983e41cfbe951748d"
+          "sha256": "9d8f54a2c6bcc5d13cfb36d489afab62ec45ab99ac64305bdf9ef146bc0f3302"
         },
         {
           "path": "cases/case081/evaluator/evaluate_model_patch.py",
@@ -1270,8 +1270,8 @@
       "cohort": "python50",
       "base_commit": "8a63c06f2e082b8c7e3c0fce035a0a7e4ca55d85",
       "image": {
-        "image_id": "sha256:9b466d593d9252da3ccb18d5270b5e8b1dcc456daa31e67273e94d2d48c9256a",
-        "pull_reference": "yutu0814/pyc-case-082-pygame@sha256:9b466d593d9252da3ccb18d5270b5e8b1dcc456daa31e67273e94d2d48c9256a"
+        "image_id": "sha256:dcf5deee19c7b652635dc85f52b205afeed4862a8318955cca32dc25cd0033d5",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-pyc-082@sha256:dcf5deee19c7b652635dc85f52b205afeed4862a8318955cca32dc25cd0033d5"
       },
       "files": [
         {
@@ -1280,7 +1280,7 @@
         },
         {
           "path": "cases/case082/evaluator/case_config.json",
-          "sha256": "9e14765ce95ada905c78ebc7861151b4026fe19323f19ba9f1d52d9325a40ac4"
+          "sha256": "a2cbcea0341e097014d4a6d7cda48647fba529a00f98e59ae400ed1dbb030aeb"
         },
         {
           "path": "cases/case082/evaluator/evaluate_model_patch.py",
