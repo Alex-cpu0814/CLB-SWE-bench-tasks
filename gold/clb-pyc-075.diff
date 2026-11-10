@@ -1,0 +1,635 @@
+diff --git a/src_c/_pygame.h b/src_c/_pygame.h
+index 9261ccbd9..347bb6598 100644
+--- a/src_c/_pygame.h
++++ b/src_c/_pygame.h
+@@ -103,8 +103,8 @@ typedef enum {
+     PGE_WINDOWMOVED,
+     PGE_WINDOWRESIZED,
+     PGE_WINDOWSIZECHANGED,
+-    PGE_WINDOWMINIMISED,
+-    PGE_WINDOWMAXIMISED,
++    PGE_WINDOWMINIMIZED,
++    PGE_WINDOWMAXIMIZED,
+     PGE_WINDOWRESTORED,
+     PGE_WINDOWENTER,
+     PGE_WINDOWLEAVE,
+@@ -175,8 +175,8 @@ typedef enum {
+     PGPOST_WINDOWMOVED,
+     PGPOST_WINDOWRESIZED,
+     PGPOST_WINDOWSIZECHANGED,
+-    PGPOST_WINDOWMINIMISED,
+-    PGPOST_WINDOWMAXIMISED,
++    PGPOST_WINDOWMINIMIZED,
++    PGPOST_WINDOWMAXIMIZED,
+     PGPOST_WINDOWRESTORED,
+     PGPOST_WINDOWENTER,
+     PGPOST_WINDOWLEAVE,
+diff --git a/src_c/constants.c b/src_c/constants.c
+index 8fb6069d3..8ab3baadd 100644
+--- a/src_c/constants.c
++++ b/src_c/constants.c
+@@ -400,8 +400,8 @@ MODINIT_DEFINE(constants)
+     DEC_CONSTS(WINDOWMOVED, PGE_WINDOWMOVED);
+     DEC_CONSTS(WINDOWRESIZED, PGE_WINDOWRESIZED);
+     DEC_CONSTS(WINDOWSIZECHANGED, PGE_WINDOWSIZECHANGED);
+-    DEC_CONSTS(WINDOWMINIMISED, PGE_WINDOWMINIMISED);
+-    DEC_CONSTS(WINDOWMAXIMISED, PGE_WINDOWMAXIMISED);
++    DEC_CONSTS(WINDOWMINIMIZED, PGE_WINDOWMINIMIZED);
++    DEC_CONSTS(WINDOWMAXIMIZED, PGE_WINDOWMAXIMIZED);
+     DEC_CONSTS(WINDOWRESTORED, PGE_WINDOWRESTORED);
+     DEC_CONSTS(WINDOWENTER, PGE_WINDOWENTER);
+     DEC_CONSTS(WINDOWLEAVE, PGE_WINDOWLEAVE);
+@@ -507,8 +507,8 @@ MODINIT_DEFINE(constants)
+     DEC_CONSTS(WINDOWMOVED, -1);
+     DEC_CONSTS(WINDOWRESIZED, -1);
+     DEC_CONSTS(WINDOWSIZECHANGED, -1);
+-    DEC_CONSTS(WINDOWMINIMISED, -1);
+-    DEC_CONSTS(WINDOWMAXIMISED, -1);
++    DEC_CONSTS(WINDOWMINIMIZED, -1);
++    DEC_CONSTS(WINDOWMAXIMIZED, -1);
+     DEC_CONSTS(WINDOWRESTORED, -1);
+     DEC_CONSTS(WINDOWENTER, -1);
+     DEC_CONSTS(WINDOWLEAVE, -1);
+diff --git a/src_c/event.c b/src_c/event.c
+index 93feec86e..b72975286 100644
+--- a/src_c/event.c
++++ b/src_c/event.c
+@@ -45,16 +45,17 @@ static int have_registered_events = 0;
+ #define JOYEVENT_DEVICE_INDEX "device_index"
+ 
+ /* Define custom functions for peep events, for SDL1/2 compat */
+-#define PG_PEEP_EVENT(x, y, z) SDL_PeepEvents(x, 1, y, z, z)
+-#define PG_PEEP_EVENT_ALL(x, y) SDL_PeepEvents(x, 1, y, SDL_FIRSTEVENT, SDL_LASTEVENT)
++#define PG_PEEP_EVENT(a, b, c, d) SDL_PeepEvents(a, b, c, d, d)
++#define PG_PEEP_EVENT_ALL(x, y, z) \
++    SDL_PeepEvents(x, y, z, SDL_FIRSTEVENT, SDL_LASTEVENT)
+ 
+ #else /* IS_SLDv1 */
+ 
+ #define JOYEVENT_INSTANCE_ID "joy"
+ #define JOYEVENT_DEVICE_INDEX "joy"
+ 
+-#define PG_PEEP_EVENT(x, y, z) SDL_PeepEvents(x, 1, y, SDL_EVENTMASK(z))
+-#define PG_PEEP_EVENT_ALL(x, y) SDL_PeepEvents(x, 1, y, SDL_ALLEVENTS)
++#define PG_PEEP_EVENT(a, b, c, d) SDL_PeepEvents(a, b, c, SDL_EVENTMASK(d))
++#define PG_PEEP_EVENT_ALL(x, y, z) SDL_PeepEvents(x, y, z, SDL_ALLEVENTS)
+ 
+ #endif /* IS_SLDv1 */
+ 
+@@ -64,6 +65,8 @@ static int have_registered_events = 0;
+ 
+ #define MAX_UINT32 0xFFFFFFFF
+ 
++#define PG_GET_LIST_LEN 128
++
+ // Map joystick instance IDs to device ids for partial backwards compatibility
+ static PyObject *joy_instance_map = NULL;
+ 
+@@ -432,10 +435,10 @@ _pg_pgevent_proxify(Uint32 type)
+             return PGPOST_WINDOWRESIZED;
+         case PGE_WINDOWSIZECHANGED:
+             return PGPOST_WINDOWSIZECHANGED;
+-        case PGE_WINDOWMINIMISED:
+-            return PGPOST_WINDOWMINIMISED;
+-        case PGE_WINDOWMAXIMISED:
+-            return PGPOST_WINDOWMAXIMISED;
++        case PGE_WINDOWMINIMIZED:
++            return PGPOST_WINDOWMINIMIZED;
++        case PGE_WINDOWMAXIMIZED:
++            return PGPOST_WINDOWMAXIMIZED;
+         case PGE_WINDOWRESTORED:
+             return PGPOST_WINDOWRESTORED;
+         case PGE_WINDOWENTER:
+@@ -566,10 +569,10 @@ _pg_pgevent_deproxify(Uint32 type)
+             return PGE_WINDOWRESIZED;
+         case PGPOST_WINDOWSIZECHANGED:
+             return PGE_WINDOWSIZECHANGED;
+-        case PGPOST_WINDOWMINIMISED:
+-            return PGE_WINDOWMINIMISED;
+-        case PGPOST_WINDOWMAXIMISED:
+-            return PGE_WINDOWMAXIMISED;
++        case PGPOST_WINDOWMINIMIZED:
++            return PGE_WINDOWMINIMIZED;
++        case PGPOST_WINDOWMAXIMIZED:
++            return PGE_WINDOWMAXIMIZED;
+         case PGPOST_WINDOWRESTORED:
+             return PGE_WINDOWRESTORED;
+         case PGPOST_WINDOWENTER:
+@@ -933,10 +936,10 @@ _pg_name_from_eventtype(int type)
+             return "WindowResized";
+         case PGE_WINDOWSIZECHANGED:
+             return "WindowSizeChanged";
+-        case PGE_WINDOWMINIMISED:
+-            return "WindowMinimised";
+-        case PGE_WINDOWMAXIMISED:
+-            return "WindowMaximised";
++        case PGE_WINDOWMINIMIZED:
++            return "WindowMinimized";
++        case PGE_WINDOWMAXIMIZED:
++            return "WindowMaximized";
+         case PGE_WINDOWRESTORED:
+             return "WindowRestored";
+         case PGE_WINDOWENTER:
+@@ -1832,7 +1835,7 @@ _pg_eventtype_as_seq(PyObject *obj, int *len)
+     *len = 1;
+     if (PySequence_Check(obj)) {
+         *len = PySequence_Size(obj);
+-        /* The retuned object gets decref'd later, so incref now */
++        /* The returned object gets decref'd later, so incref now */
+         Py_INCREF(obj);
+         return obj;
+     }
+@@ -1848,9 +1851,9 @@ _pg_flush_events(Uint32 type) {
+ #if IS_SDLv1
+     SDL_Event event;
+     if (type == MAX_UINT32)
+-        while (PG_PEEP_EVENT_ALL(&event, SDL_GETEVENT) == 1);
++        while (PG_PEEP_EVENT_ALL(&event, 1, SDL_GETEVENT) == 1);
+     else
+-        while (PG_PEEP_EVENT(&event, SDL_GETEVENT, type) == 1);
++        while (PG_PEEP_EVENT(&event, 1, SDL_GETEVENT, type) == 1);
+ #else /* IS_SDLv2 */
+     if (type == MAX_UINT32)
+         SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
+@@ -1927,11 +1930,93 @@ _pg_event_append_to_list(PyObject *list, SDL_Event *event)
+ }
+ 
+ static PyObject *
+-pg_event_get(PyObject *self, PyObject *args, PyObject *kwargs)
+-{
++_pg_get_all_events(void) {
++    SDL_Event eventbuf[PG_GET_LIST_LEN];
++    PyObject *list;
++    int loop, len = PG_GET_LIST_LEN;
++
++    list = PyList_New(0);
++    if (!list)
++        return PyErr_NoMemory();
++
++    while (len == PG_GET_LIST_LEN) {
++        len = PG_PEEP_EVENT_ALL(eventbuf, PG_GET_LIST_LEN, SDL_GETEVENT);
++        if (len == -1) {
++            PyErr_SetString(pgExc_SDLError, SDL_GetError());
++            goto error;
++        }
++
++        for (loop = 0; loop < len; loop++) {
++            if (!_pg_event_append_to_list(list, &eventbuf[loop]))
++                goto error;
++        }
++    }
++    return list;
++
++error:
++    Py_DECREF(list);
++    return NULL;
++}
++
++static PyObject *
++_pg_get_seq_events(PyObject *obj) {
+     SDL_Event event;
+     int loop, type, len, ret;
+-    PyObject *seq = NULL, *list = NULL, *obj = NULL;
++    PyObject *seq, *list;
++
++    list = PyList_New(0);
++    if (!list)
++        return PyErr_NoMemory();
++
++    seq = _pg_eventtype_as_seq(obj, &len);
++    if (!seq)
++        goto error;
++
++    for (loop = 0; loop < len; loop++) {
++        type = _pg_eventtype_from_seq(seq, loop);
++        if (type == -1)
++            goto error;
++
++        do {
++            ret = PG_PEEP_EVENT(&event, 1, SDL_GETEVENT, type);
++            if (ret < 0) {
++                PyErr_SetString(pgExc_SDLError, SDL_GetError());
++                goto error;
++            }
++            else if (ret > 0) {
++                if (!_pg_event_append_to_list(list, &event))
++                    goto error;
++            }
++        } while (ret);
++#if IS_SDLv2
++        do {
++            ret = PG_PEEP_EVENT(&event, 1, SDL_GETEVENT,
++                _pg_pgevent_proxify(type));
++            if (ret < 0) {
++                PyErr_SetString(pgExc_SDLError, SDL_GetError());
++                goto error;
++            }
++            else if (ret > 0) {
++                if (!_pg_event_append_to_list(list, &event))
++                    goto error;
++            }
++        } while (ret);
++#endif /* IS_SDLv2 */
++    }
++    Py_DECREF(seq);
++    return list;
++
++error:
++    /* While doing a goto here, PyErr must be set */
++    Py_DECREF(list);
++    Py_XDECREF(seq);
++    return NULL;
++}
++
++static PyObject *
++pg_event_get(PyObject *self, PyObject *args, PyObject *kwargs)
++{
++    PyObject *obj = NULL;
+     int dopump = 1;
+ 
+     static char *kwids[] = {
+@@ -1952,64 +2037,13 @@ pg_event_get(PyObject *self, PyObject *args, PyObject *kwargs)
+ 
+     VIDEO_INIT_CHECK();
+ 
+-    list = PyList_New(0);
+-    if (!list)
+-        return PyErr_NoMemory();
+-
+     if (dopump)
+         SDL_PumpEvents();
+ 
+-    if (obj == NULL || obj == Py_None) {
+-        while (PG_PEEP_EVENT_ALL(&event, SDL_GETEVENT) == 1) {
+-            if(!_pg_event_append_to_list(list, &event))
+-                goto error;
+-        }
+-    }
+-    else {
+-        seq = _pg_eventtype_as_seq(obj, &len);
+-        if (!seq)
+-            goto error;
+-
+-        for (loop = 0; loop < len; loop++) {
+-            type = _pg_eventtype_from_seq(seq, loop);
+-            if (type == -1)
+-                goto error;
+-
+-            do {
+-                ret = PG_PEEP_EVENT(&event, SDL_GETEVENT, type);
+-                if (ret < 0) {
+-                    PyErr_SetString(pgExc_SDLError, SDL_GetError());
+-                    goto error;
+-                }
+-                else if (ret > 0) {
+-                    if (!_pg_event_append_to_list(list, &event))
+-                        goto error;
+-                }
+-            } while (ret);
+-#if IS_SDLv2
+-            do {
+-                ret = PG_PEEP_EVENT(&event, SDL_GETEVENT,
+-                    _pg_pgevent_proxify(type));
+-                if (ret < 0) {
+-                    PyErr_SetString(pgExc_SDLError, SDL_GetError());
+-                    goto error;
+-                }
+-                else if (ret > 0) {
+-                    if (!_pg_event_append_to_list(list, &event))
+-                        goto error;
+-                }
+-            } while (ret);
+-#endif /* IS_SDLv2 */
+-        }
+-        Py_DECREF(seq);
+-    }
+-    return list;
+-
+-error:
+-    /* While doing a goto here, PyErr must be set */
+-    Py_DECREF(list);
+-    Py_XDECREF(seq);
+-    return NULL;
++    if (obj == NULL || obj == Py_None)
++        return _pg_get_all_events();
++    else
++        return _pg_get_seq_events(obj);
+ }
+ 
+ static PyObject *
+@@ -2042,7 +2076,7 @@ pg_event_peek(PyObject *self, PyObject *args, PyObject *kwargs)
+         SDL_PumpEvents();
+ 
+     if (obj == NULL || obj == Py_None) {
+-        res = PG_PEEP_EVENT_ALL(&event, SDL_PEEKEVENT);
++        res = PG_PEEP_EVENT_ALL(&event, 1, SDL_PEEKEVENT);
+         if (res < 0)
+             return RAISE(pgExc_SDLError, SDL_GetError());
+         return pgEvent_New(res ? &event : NULL);
+@@ -2058,7 +2092,7 @@ pg_event_peek(PyObject *self, PyObject *args, PyObject *kwargs)
+                 Py_DECREF(seq);
+                 return NULL;
+             }
+-            res = PG_PEEP_EVENT(&event, SDL_PEEKEVENT, type);
++            res = PG_PEEP_EVENT(&event, 1, SDL_PEEKEVENT, type);
+             if (res) {
+                 Py_DECREF(seq);
+ 
+@@ -2067,8 +2101,8 @@ pg_event_peek(PyObject *self, PyObject *args, PyObject *kwargs)
+                 return PyInt_FromLong(1);
+             }
+ #if IS_SDLv2
+-            res = PG_PEEP_EVENT(&event, SDL_PEEKEVENT,
+-                _pg_pgevent_proxify(type));
++            res = PG_PEEP_EVENT(&event, 1, SDL_PEEKEVENT,
++                                _pg_pgevent_proxify(type));
+             if (res) {
+                 Py_DECREF(seq);
+ 
+diff --git a/src_c/rwobject.c b/src_c/rwobject.c
+index 1eff5e05a..6e2ab40f8 100644
+--- a/src_c/rwobject.c
++++ b/src_c/rwobject.c
+@@ -528,6 +528,7 @@ pgRWops_FromFileObject(PyObject *obj)
+ static int
+ pgRWops_ReleaseObject(SDL_RWops *context)
+ {
++    int ret = 0;
+     if (pgRWops_IsFileObject(context)) {
+ #ifdef WITH_THREAD
+         PyGILState_STATE state = PyGILState_Ensure();
+@@ -549,11 +550,10 @@ pgRWops_ReleaseObject(SDL_RWops *context)
+             SDL_FreeRW(context);
+         }
+         else {
+-            int ret;
+-            if ((ret = SDL_RWclose(context)) < 0) {
++            ret = SDL_RWclose(context);
++            if (ret < 0) {
+                 PyErr_SetString(PyExc_IOError, SDL_GetError());
+                 Py_DECREF(fileobj);
+-                return ret;
+             }
+         }
+ 
+@@ -562,13 +562,11 @@ pgRWops_ReleaseObject(SDL_RWops *context)
+ #endif /* WITH_THREAD */
+     }
+     else {
+-        int ret;
+-        if ((ret = SDL_RWclose(context)) < 0) {
++        ret = SDL_RWclose(context);
++        if (ret < 0)
+             PyErr_SetString(PyExc_IOError, SDL_GetError());
+-            return ret;
+-        }
+     }
+-    return 0;
++    return ret;
+ }
+ 
+ #if IS_SDLv1
+diff --git a/src_c/time.c b/src_c/time.c
+index 5a8d9bbdc..b12d14814 100644
+--- a/src_c/time.c
++++ b/src_c/time.c
+@@ -37,24 +37,63 @@ typedef struct pgEventTimer {
+ static pgEventTimer *pg_event_timer = NULL;
+ static SDL_mutex *timermutex = NULL;
+ 
++static void
++_pg_event_timer_cleanup(void)
++{
++    pgEventTimer *hunt, *todel;
++    /* We can let errors silently pass in this function, because this
++     * needs to run */
++    SDL_LockMutex(timermutex);
++    if (pg_event_timer) {
++        hunt = pg_event_timer;
++        while (hunt) {
++            todel = hunt;
++            hunt = hunt->next;
++            Py_DECREF(todel->event);
++            PyMem_Del(todel);
++        }
++        pg_event_timer = NULL;
++    }
++    SDL_UnlockMutex(timermutex);
++    /* After we are done, we can destroy the mutex as well */
++    SDL_DestroyMutex(timermutex);
++    timermutex = NULL;
++}
++
++static PyObject *
++pg_time_autoinit(PyObject *self)
++{
++    /* register cleanup function for event timer holding structure,
++     * allocate a mutex for this structure too */
++    if (!timermutex && !pg_event_timer) {
++        timermutex = SDL_CreateMutex();
++        if (!timermutex) {
++            PyErr_SetString(pgExc_SDLError, SDL_GetError());
++            return PyInt_FromLong(0);
++        }
++        pg_RegisterQuit(_pg_event_timer_cleanup);
++    }
++    return PyInt_FromLong(1);
++}
++
+ static int
+ _pg_add_event_timer(pgEventObject *ev, int repeat)
+ {
+     pgEventTimer *new;
+ 
+-    if (SDL_LockMutex(timermutex) < 0) {
+-        /* this case will almost never happen, but still handle it */
+-        PyErr_SetString(pgExc_SDLError, SDL_GetError());
+-        return 0;
+-    }
+-
+     new = PyMem_New(pgEventTimer, 1);
+     if (!new) {
+-        SDL_UnlockMutex(timermutex);
+         PyErr_NoMemory();
+         return 0;
+     }
+ 
++    if (SDL_LockMutex(timermutex) < 0) {
++        /* this case will almost never happen, but still handle it */
++        PyMem_Del(new);
++        PyErr_SetString(pgExc_SDLError, SDL_GetError());
++        return 0;
++    }
++
+     new->next = pg_event_timer;
+     new->event = ev;
+     new->repeat = repeat;
+@@ -70,9 +109,7 @@ _pg_remove_event_timer(pgEventObject *ev)
+ {
+     pgEventTimer *hunt, *prev = NULL;
+ 
+-    if (SDL_LockMutex(timermutex) < 0)
+-        return;
+-
++    SDL_LockMutex(timermutex);
+     if (pg_event_timer) {
+         hunt = pg_event_timer;
+         while (hunt->event->type != ev->type) {
+@@ -97,50 +134,25 @@ _pg_remove_event_timer(pgEventObject *ev)
+ static pgEventTimer *
+ _pg_get_event_on_timer(pgEventObject *ev)
+ {
+-    pgEventTimer *hunt, *ret = NULL;
++    pgEventTimer *hunt;
+ 
+     if (SDL_LockMutex(timermutex) < 0)
+         return NULL;
+ 
+-    if (pg_event_timer) {
+-        hunt = pg_event_timer;
+-        do {
+-            if (hunt->event->type == ev->type) {
+-                if (hunt->repeat >= 0)
+-                    hunt->repeat--;
+-                ret = hunt;
+-                break;
++    hunt = pg_event_timer;
++    while (hunt) {
++        if (hunt->event->type == ev->type) {
++            if (hunt->repeat >= 0) {
++                hunt->repeat--;
+             }
+-            hunt = hunt->next;
+-        } while (hunt);
+-    }
+-    /* Chances of it failing here are next to zero, dont do anything */
+-    SDL_UnlockMutex(timermutex);
+-    return ret;
+-}
+-
+-static void
+-_pg_event_timer_cleanup(void)
+-{
+-    pgEventTimer *hunt, *todel;
+-
+-    /* We can let errors silently pass in this function, because this
+-     * needs to run */
+-    SDL_LockMutex(timermutex);
+-    if (pg_event_timer) {
+-        hunt = pg_event_timer;
+-        while (hunt) {
+-            todel = hunt;
+-            hunt = hunt->next;
+-            Py_DECREF(todel->event);
+-            PyMem_Del(todel);
++            break;
+         }
+-        pg_event_timer = NULL;
++        hunt = hunt->next;
+     }
++
++    /* Chances of it failing here are next to zero, dont do anything */
+     SDL_UnlockMutex(timermutex);
+-    /* After we are done, we can destroy the mutex as well */
+-    SDL_DestroyMutex(timermutex);
+-    timermutex = NULL;
++    return hunt;
+ }
+ 
+ static Uint32
+@@ -167,6 +179,9 @@ timer_callback(Uint32 interval, void *param)
+ #endif
+             Py_DECREF(evtimer->event->dict);
+     }
++    else
++        evtimer->repeat = 0;
++
+ 
+     if (!evtimer->repeat) {
+         /* This does memory cleanup */
+@@ -273,22 +288,23 @@ time_wait(PyObject *self, PyObject *arg)
+ static PyObject *
+ time_set_timer(PyObject *self, PyObject *args, PyObject *kwargs)
+ {
+-    int ticks, once = 0, repeat = 0;
++    int ticks, loops = 0;
+     PyObject *obj;
+     pgEventObject *e;
+ 
+     static char *kwids[] = {
+         "event",
+         "millis",
+-        "once",
+-        "repeat",
++        "loops",
+         NULL
+     };
+ 
+-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii", kwids,
+-                                     &obj, &ticks, &once, &repeat))
++    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|i", kwids,
++                                     &obj, &ticks, &loops))
+         return NULL;
+ 
++    if (!timermutex)
++        return RAISE(pgExc_SDLError, "pygame is not initialized");
+ 
+     if (PyInt_Check(obj)) {
+         e = (pgEventObject *)pgEvent_New2(PyInt_AsLong(obj), NULL);
+@@ -319,13 +335,7 @@ time_set_timer(PyObject *self, PyObject *args, PyObject *kwargs)
+         }
+     }
+ 
+-    /* The repeat argument will determine how many times an event is
+-     * posted. If repeat was not passed, we determine the repeat argument
+-     * from the once argument */
+-    if (!repeat)
+-        repeat = once ? 1 : 0;
+-
+-    if (!_pg_add_event_timer(e, repeat)) {
++    if (!_pg_add_event_timer(e, loops)) {
+         Py_DECREF(e);
+         return NULL;
+     }
+@@ -539,6 +549,8 @@ ClockInit(PyObject *self)
+ }
+ 
+ static PyMethodDef _time_methods[] = {
++    {"__PYGAMEinit__", (PyCFunction)pg_time_autoinit, METH_NOARGS,
++        "auto initialize function for time"},
+     {"get_ticks", (PyCFunction)time_get_ticks, METH_NOARGS,
+      DOC_PYGAMETIMEGETTICKS},
+     {"delay", time_delay, METH_VARARGS, DOC_PYGAMETIMEDELAY},
+@@ -588,17 +600,6 @@ MODINIT_DEFINE(time)
+         MODINIT_ERROR;
+     }
+ 
+-    /* register cleanup function for event timer holding structure,
+-     * allocate a mutex for this structure too */
+-    if (!timermutex && !pg_event_timer) {
+-        timermutex = SDL_CreateMutex();
+-        if (!timermutex) {
+-            PyErr_SetString(PyExc_ImportError, SDL_GetError());
+-            MODINIT_ERROR;
+-        }
+-        pg_RegisterQuit(_pg_event_timer_cleanup);
+-    }
+-
+     /* create the module */
+ #if PY3
+     return PyModule_Create(&_module);
+diff --git a/src_py/locals.py b/src_py/locals.py
+index 5952db27c..26461b925 100644
+--- a/src_py/locals.py
++++ b/src_py/locals.py
+@@ -576,8 +576,8 @@ __all__ = [
+     'WINDOWMOVED',
+     'WINDOWRESIZED',
+     'WINDOWSIZECHANGED',
+-    'WINDOWMINIMISED',
+-    'WINDOWMAXIMISED',
++    'WINDOWMINIMIZED',
++    'WINDOWMAXIMIZED',
+     'WINDOWRESTORED',
+     'WINDOWENTER',
+     'WINDOWLEAVE',

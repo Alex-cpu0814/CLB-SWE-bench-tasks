@@ -1,0 +1,21 @@
+diff --git a/src/PIL/Image.py b/src/PIL/Image.py
+index 34959cd..5d565f6 100644
+--- a/src/PIL/Image.py
++++ b/src/PIL/Image.py
+@@ -2180,12 +2180,12 @@ class Image:
+ 
+         filename = ""
+         open_fp = False
+-        if isPath(fp):
+-            filename = fp
+-            open_fp = True
+-        elif isinstance(fp, Path):
++        if isinstance(fp, Path):
+             filename = str(fp)
+             open_fp = True
++        elif isPath(fp):
++            filename = fp
++            open_fp = True
+         elif fp == sys.stdout:
+             try:
+                 fp = sys.stdout.buffer

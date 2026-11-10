@@ -1,0 +1,162 @@
+diff --git a/scipy/ndimage/src/ni_filters.c b/scipy/ndimage/src/ni_filters.c
+index 96c2e799..c5e70562 100644
+--- a/scipy/ndimage/src/ni_filters.c
++++ b/scipy/ndimage/src/ni_filters.c
+@@ -639,9 +639,10 @@ exit:
+     return PyErr_Occurred() ? 0 : 1;
+ }
+ 
+-static double NI_Select(double *buffer, int min, int max, int rank)
++static double NI_Select(double *buffer, npy_intp min,
++                        npy_intp max, npy_intp rank)
+ {
+-    int ii, jj;
++    npy_intp ii, jj;
+     double x, t;
+ 
+     if (min == max)
+diff --git a/scipy/ndimage/src/ni_interpolation.c b/scipy/ndimage/src/ni_interpolation.c
+index bb67b33c..94f2a7ab 100644
+--- a/scipy/ndimage/src/ni_interpolation.c
++++ b/scipy/ndimage/src/ni_interpolation.c
+@@ -466,7 +466,8 @@ NI_GeometricTransform(PyArrayObject *input, int (*map)(npy_intp*, double*,
+         size *= output->dimensions[qq];
+     for(kk = 0; kk < size; kk++) {
+         double t = 0.0;
+-        int constant = 0, edge = 0, offset = 0;
++        int constant = 0, edge = 0;
++        npy_intp offset = 0;
+         if (map) {
+             /* call mappint functions: */
+             if (!map(io.coordinates, icoor, orank, irank, map_data)) {
+@@ -513,11 +514,11 @@ NI_GeometricTransform(PyArrayObject *input, int (*map)(npy_intp*, double*,
+             double cc = map_coordinate(icoor[hh], idimensions[hh], mode);
+             if (cc > -1.0) {
+                 /* find the filter location along this axis: */
+-                int start;
++                npy_intp start;
+                 if (order & 1) {
+-                    start = (int)floor(cc) - order / 2;
++                    start = (npy_intp)floor(cc) - order / 2;
+                 } else {
+-                    start = (int)floor(cc + 0.5) - order / 2;
++                    start = (npy_intp)floor(cc + 0.5) - order / 2;
+                 }
+                 /* get the offset to the start of the filter: */
+                 offset += istrides[hh] * start;
+@@ -526,12 +527,12 @@ NI_GeometricTransform(PyArrayObject *input, int (*map)(npy_intp*, double*,
+                     edge = 1;
+                     edge_offsets[hh] = data_offsets[hh];
+                     for(ll = 0; ll <= order; ll++) {
+-                        int idx = start + ll;
+-                        int len = idimensions[hh];
++                        npy_intp idx = start + ll;
++                        npy_intp len = idimensions[hh];
+                         if (len <= 1) {
+                             idx = 0;
+                         } else {
+-                            int s2 = 2 * len - 2;
++                            npy_intp s2 = 2 * len - 2;
+                             if (idx < 0) {
+                                 idx = s2 * (int)(-idx / s2) + idx;
+                                 idx = idx <= 1 - len ? idx + s2 : -idx;
+@@ -562,7 +563,7 @@ NI_GeometricTransform(PyArrayObject *input, int (*map)(npy_intp*, double*,
+             t = 0.0;
+             for(hh = 0; hh < filter_size; hh++) {
+                 double coeff = 0.0;
+-                int idx = 0;
++                npy_intp idx = 0;
+ 
+                 if (NI_UNLIKELY(edge)) {
+                     for(ll = 0; ll < irank; ll++) {
+@@ -739,13 +740,13 @@ int NI_ZoomShift(PyArrayObject *input, PyArrayObject* zoom_ar,
+                 cc *= zoom;
+             cc = map_coordinate(cc, idimensions[jj], mode);
+             if (cc > -1.0) {
+-                int start;
++                npy_intp start;
+                 if (zeros && zeros[jj])
+                     zeros[jj][kk] = 0;
+                 if (order & 1) {
+-                    start = (int)floor(cc) - order / 2;
++                    start = (npy_intp)floor(cc) - order / 2;
+                 } else {
+-                    start = (int)floor(cc + 0.5) - order / 2;
++                    start = (npy_intp)floor(cc + 0.5) - order / 2;
+                 }
+                 offsets[jj][kk] = istrides[jj] * start;
+                 if (start < 0 || start + order >= idimensions[jj]) {
+@@ -755,12 +756,12 @@ int NI_ZoomShift(PyArrayObject *input, PyArrayObject* zoom_ar,
+                         goto exit;
+                     }
+                     for(hh = 0; hh <= order; hh++) {
+-                        int idx = start + hh;
+-                         int len = idimensions[jj];
++                        npy_intp idx = start + hh;
++                        npy_intp len = idimensions[jj];
+                         if (len <= 1) {
+                             idx = 0;
+                         } else {
+-                            int s2 = 2 * len - 2;
++                            npy_intp s2 = 2 * len - 2;
+                             if (idx < 0) {
+                                 idx = s2 * (int)(-idx / s2) + idx;
+                                 idx = idx <= 1 - len ? idx + s2 : -idx;
+@@ -846,7 +847,7 @@ int NI_ZoomShift(PyArrayObject *input, PyArrayObject* zoom_ar,
+             const int type_num = NI_NormalizeType(input->descr->type_num);
+             t = 0.0;
+             for(hh = 0; hh < filter_size; hh++) {
+-                int idx = 0;
++                npy_intp idx = 0;
+                 double coeff = 0.0;
+ 
+                 if (NI_UNLIKELY(edge)) {
+diff --git a/scipy/ndimage/src/ni_measure.c b/scipy/ndimage/src/ni_measure.c
+index dcb34f86..f8ad50d4 100644
+--- a/scipy/ndimage/src/ni_measure.c
++++ b/scipy/ndimage/src/ni_measure.c
+@@ -564,11 +564,11 @@ int NI_Histogram(PyArrayObject *input, PyArrayObject *labels,
+             doit = label != 0;
+         }
+         if (doit) {
+-            int bin;
++            npy_intp bin;
+             double val;
+             NI_GET_VALUE(pi, val, NI_NormalizeType(input->descr->type_num));
+             if (val >= min && val < max) {
+-                bin = (int)((val - min) / bsize);
++                bin = (npy_intp)((val - min) / bsize);
+                 ++(ph[idx][bin]);
+             }
+         }
+@@ -691,7 +691,7 @@ int NI_WatershedIFT(PyArrayObject* input, PyArrayObject* markers,
+     /* Initialization and find the maximum of the input. */
+     maxval = 0;
+     for(jj = 0; jj < size; jj++) {
+-        int ival = 0;
++        npy_intp ival = 0;
+         switch(NI_NormalizeType(input->descr->type_num)) {
+         CASE_GET_INPUT(ival, pi, UInt8);
+         CASE_GET_INPUT(ival, pi, UInt16);
+diff --git a/scipy/ndimage/src/ni_morphology.c b/scipy/ndimage/src/ni_morphology.c
+index 787120f2..588fa1a2 100644
+--- a/scipy/ndimage/src/ni_morphology.c
++++ b/scipy/ndimage/src/ni_morphology.c
+@@ -765,7 +765,7 @@ static void _VoronoiFT(char *pf, npy_intp len, npy_intp *coor, int rank,
+                        npy_intp **f, npy_intp *g, Float64 *sampling)
+ {
+     npy_intp l = -1, ii, maxl, idx1, idx2;
+-    int jj;
++    npy_intp jj;
+ 
+     for(ii = 0; ii < len; ii++)
+         for(jj = 0; jj < rank; jj++)
+@@ -853,7 +853,7 @@ static void _ComputeFT(char *pi, char *pf, npy_intp *ishape,
+                        int d, npy_intp *coor, npy_intp **f, npy_intp *g,
+                                              PyArrayObject *features, Float64 *sampling)
+ {
+-    int kk;
++    npy_intp kk;
+     npy_intp jj;
+ 
+     if (d == 0) {

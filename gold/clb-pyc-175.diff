@@ -1,0 +1,164 @@
+diff --git a/src/magnetic_spacegroup.c b/src/magnetic_spacegroup.c
+index fd063c9..ab517b3 100644
+--- a/src/magnetic_spacegroup.c
++++ b/src/magnetic_spacegroup.c
+@@ -496,10 +496,6 @@ err:
+         representatives = NULL;
+     }
+ 
+-    if (ref_sg != NULL) {
+-        free(ref_sg);
+-        ref_sg = NULL;
+-    }
+     return 0;
+ }
+ /* Get family space group (FSG) and return its order. */
+diff --git a/src/spin.c b/src/spin.c
+index a26035a..11683f1 100644
+--- a/src/spin.c
++++ b/src/spin.c
+@@ -412,21 +412,24 @@ static MagneticSymmetry *get_operations(
+                 return NULL;
+             }
+ 
+-            /* Skip if relevant tensors are zeros because they have nothing to
+-             * do with magnetic symmetry search! */
++            // Skip if relevant tensors are zeros because they have nothing to
++            // do with magnetic symmetry search!
++            // If spins `m` and `-m` are equal up to `mag_symprec`,
++            // m - (-m) = 2m < mag_symprec
++            // Thus, we need to check `m` and 0 up to `0.5 * mag_symprec`!
+             if (cell->tensor_rank == COLLINEAR) {
+-                if (is_zero(cell->tensors[j], mag_symprec) &&
+-                    is_zero(cell->tensors[k], mag_symprec)) {
++                if (is_zero(cell->tensors[j], 0.5 * mag_symprec) &&
++                    is_zero(cell->tensors[k], 0.5 * mag_symprec)) {
+                     continue;
+                 }
+             }
+             if (cell->tensor_rank == NONCOLLINEAR) {
+-                if (is_zero(cell->tensors[j * 3], mag_symprec) &&
+-                    is_zero(cell->tensors[j * 3 + 1], mag_symprec) &&
+-                    is_zero(cell->tensors[j * 3 + 2], mag_symprec) &&
+-                    is_zero(cell->tensors[k * 3], mag_symprec) &&
+-                    is_zero(cell->tensors[k * 3 + 1], mag_symprec) &&
+-                    is_zero(cell->tensors[k * 3 + 2], mag_symprec)) {
++                if (is_zero(cell->tensors[j * 3], 0.5 * mag_symprec) &&
++                    is_zero(cell->tensors[j * 3 + 1], 0.5 * mag_symprec) &&
++                    is_zero(cell->tensors[j * 3 + 2], 0.5 * mag_symprec) &&
++                    is_zero(cell->tensors[k * 3], 0.5 * mag_symprec) &&
++                    is_zero(cell->tensors[k * 3 + 1], 0.5 * mag_symprec) &&
++                    is_zero(cell->tensors[k * 3 + 2], 0.5 * mag_symprec)) {
+                     continue;
+                 }
+             }
+@@ -613,6 +616,7 @@ static int *get_symmetry_permutations(const MagneticSymmetry *magnetic_symmetry,
+                         cell->lattice, symprec)) {
+                     continue;
+                 }
++                debug_print("Try to overlap site-%d (%f) with site-%d (%f)\n", i, scalar, j, cell->tensors[j]);
+                 if (cell->tensor_rank == COLLINEAR &&
+                     !is_zero(cell->tensors[j] - scalar, mag_symprec)) {
+                     continue;
+diff --git a/test/README.md b/test/README.md
+index cb2c6a7..251e22e 100644
+--- a/test/README.md
++++ b/test/README.md
+@@ -25,7 +25,7 @@ For older CMake<3.14
+ cd test
+ mkdir build && cd build
+ cmake -DUSE_SANITIZER="Address" -DCMAKE_BUILD_TYPE="Debug" ..
+-cmake --build build
++cmake --build .
+ ctest
+ ```
+ 
+@@ -60,5 +60,88 @@ TEST(<your_test_suite_name>, <test_name>) {
+ }
+ ```
+ 
++## Utility functions for preparing structures
++
++When you find a doubtful `cell` with Python API, the following python snippets will be useful to prepare a test case for Python testing and C testing.
++
++```python
++def print_python_cell(cell):
++    if len(cell) == 3:
++        lattice, positions, numbers = cell
++        magmoms = None
++    elif len(cell) == 4:
++        lattice, positions, numbers, magmoms = cell
++
++    contents = []
++
++    # lattice
++    contents.append("lattice = np.array([")
++    for i in range(3):
++        contents.append(f"    [{lattice[i][0]:.8f}, {lattice[i][1]:.8f}, {lattice[i][2]:.8f}],")
++    contents.append("])")
++
++    # positions
++    contents.append("positions = np.array([")
++    for i in range(len(positions)):
++        contents.append(
++            f"    [{positions[i][0]:.8f}, {positions[i][1]:.8f}, {positions[i][2]:.8f}],"
++        )
++    contents.append("])")
++
++    # numbers
++    contents.append("numbers = np.array([" + ", ".join(map(str, numbers)) + "])")
++
++    # magmoms
++    if magmoms:
++        contents.append("magmoms = np.array([")
++        for i in range(len(positions)):
++            contents.append(f"    [{magmoms[i][0]:.8f}, {magmoms[i][1]:.8f}, {magmoms[i][2]:.8f}],")
++        contents.append("])")
++
++    print("\n".join(contents))
++```
++
++```python
++def print_cpp_cell(cell):
++    if len(cell) == 3:
++        lattice, positions, numbers = cell
++        magmoms = None
++    elif len(cell) == 4:
++        lattice, positions, numbers, magmoms = cell
++
++    contents = []
++
++    # lattice
++    lattice_col = lattice.T
++    contents.append("double lattice[3][3] = {")
++    for i in range(3):
++        contents.append(
++            f"    {{ {lattice_col[i][0]:.8f}, {lattice_col[i][1]:.8f}, {lattice_col[i][2]:.8f} }},"
++        )
++    contents.append("};")
++
++    # positions
++    contents.append("double positions[][3] = {")
++    for i in range(len(positions)):
++        contents.append(
++            f"    {{ {positions[i][0]:.8f}, {positions[i][1]:.8f}, {positions[i][2]:.8f} }},"
++        )
++    contents.append("};")
++
++    # numbers
++    contents.append("int types[] = {" + ", ".join(map(str, numbers)) + "};")
++
++    # magmoms
++    if magmoms:
++        contents.append("double spins[] = {")
++        for i in range(len(positions)):
++            contents.append(f"    {magmoms[i][0]:.8f}, {magmoms[i][1]:.8f}, {magmoms[i][2]:.8f},")
++        contents.append("};")
++
++    contents.append(f"int num_atom = {len(positions)};")
++
++    print("\n".join(contents))
++```
++
+ ## Resources
+ - <https://google.github.io/googletest/>

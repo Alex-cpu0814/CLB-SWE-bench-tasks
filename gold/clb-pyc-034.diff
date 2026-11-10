@@ -1,0 +1,96 @@
+diff --git a/scipy/integrate/_odepackmodule.c b/scipy/integrate/_odepackmodule.c
+index 80bfadb..b141a23 100644
+--- a/scipy/integrate/_odepackmodule.c
++++ b/scipy/integrate/_odepackmodule.c
+@@ -497,6 +497,7 @@ odepack_odeint(PyObject *dummy, PyObject *args, PyObject *kwdict)
+     npy_intp out_sz = 0, dims[2];
+     int k, ntimes, crit_ind = 0;
+     int allocated = 0, full_output = 0, numcrit = 0;
++    int t0count;
+     double *yout, *yout_ptr, *tout_ptr, *tcrit;
+     double *wa;
+     static char *kwlist[] = {"fun", "y0", "t", "args", "Dfun", "col_deriv",
+@@ -591,7 +592,16 @@ odepack_odeint(PyObject *dummy, PyObject *args, PyObject *kwdict)
+     tout = (double *) PyArray_DATA(ap_tout);
+     ntimes = PyArray_Size((PyObject *)ap_tout);
+     dims[0] = ntimes;
+-    t = tout[0];
++
++    t0count = 0;
++    if (ntimes > 0) {
++        /* Copy tout[0] to t, and count how many times it occurs. */
++        t = tout[0];
++        t0count = 1;
++        while ((t0count < ntimes) && (tout[t0count] == t)) {
++            ++t0count;
++        }
++    }
+ 
+     /* Setup array to hold the output evaluations*/
+     ap_yout= (PyArrayObject *) PyArray_SimpleNew(2,dims,NPY_DOUBLE);
+@@ -599,9 +609,13 @@ odepack_odeint(PyObject *dummy, PyObject *args, PyObject *kwdict)
+         goto fail;
+     }
+     yout = (double *) PyArray_DATA(ap_yout);
+-    /* Copy initial vector into first row of output */
+-    memcpy(yout, y, neq*sizeof(double));  /* copy initial value to output */
+-    yout_ptr = yout + neq;    /* set output pointer to next position */
++
++    /* Copy initial vector into first row(s) of output */
++    yout_ptr = yout;
++    for (k = 0; k < t0count; ++k) {
++        memcpy(yout_ptr, y, neq*sizeof(double));
++        yout_ptr += neq;
++    }
+ 
+     itol = setup_extra_inputs(&ap_rtol, o_rtol, &ap_atol, o_atol, &ap_tcrit,
+                               o_tcrit, &numcrit, neq);
+@@ -643,7 +657,7 @@ odepack_odeint(PyObject *dummy, PyObject *args, PyObject *kwdict)
+         iopt = 1;
+     }
+     istate = 1;
+-    k = 1;
++    k = t0count;
+ 
+     /* If full output make some useful output arrays */
+     if (full_output) {
+diff --git a/scipy/integrate/odepack.py b/scipy/integrate/odepack.py
+index 2f0d25b..ccfde88 100644
+--- a/scipy/integrate/odepack.py
++++ b/scipy/integrate/odepack.py
+@@ -3,10 +3,12 @@ from __future__ import division, print_function, absolute_import
+ 
+ __all__ = ['odeint']
+ 
++import numpy as np
+ from . import _odepack
+ from copy import copy
+ import warnings
+ 
++
+ class ODEintWarning(Warning):
+     pass
+ 
+@@ -61,6 +63,8 @@ def odeint(func, y0, t, args=(), Dfun=None, col_deriv=0, full_output=0,
+     t : array
+         A sequence of time points for which to solve for y.  The initial
+         value point should be the first element of this sequence.
++        This sequence must be monotonically increasing or monotonically
++        decreasing; repeated values are allowed.
+     args : tuple, optional
+         Extra arguments to pass to function.
+     Dfun : callable(y, t, ...) or callable(t, y, ...)
+@@ -225,6 +229,13 @@ def odeint(func, y0, t, args=(), Dfun=None, col_deriv=0, full_output=0,
+         ml = -1  # changed to zero inside function call
+     if mu is None:
+         mu = -1  # changed to zero inside function call
++
++    dt = np.diff(t)
++    if not((dt >= 0).all() or (dt <= 0).all()):
++        raise ValueError("The values in t must be monotonically increasing "
++                         "or monotonically decreasing; repeated values are "
++                         "allowed.")
++
+     t = copy(t)
+     y0 = copy(y0)
+     output = _odepack.odeint(func, y0, t, args, Dfun, col_deriv, ml, mu,

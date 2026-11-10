@@ -1,0 +1,48 @@
+diff --git a/docs/reST/ref/freetype.rst b/docs/reST/ref/freetype.rst
+index a566c4cf7..f65a6a848 100644
+--- a/docs/reST/ref/freetype.rst
++++ b/docs/reST/ref/freetype.rst
+@@ -422,7 +422,7 @@ The :mod:`freetype` module is new in Pygame 1.9.2
+               width, height = surf.get_size()
+               line_spacing = font.get_sized_height() + 2
+               x, y = 0, line_spacing
+-              space = font.get_rect(' ' * 2)  # second space given width 0
++              space = font.get_rect(' ')
+               for word in words:
+                   bounds = font.get_rect(word)
+                   if x + bounds.width + bounds.x >= width:
+diff --git a/src/freetype/ft_layout.c b/src/freetype/ft_layout.c
+index acc6f8627..95d53cb44 100644
+--- a/src/freetype/ft_layout.c
++++ b/src/freetype/ft_layout.c
+@@ -371,6 +371,30 @@ position_glyphs(Layout *ftext)
+ 
+     }
+ 
++    /* Deal with the special case of a trailing space.
++     *
++     * In determining the bounding box of the text, the above loop omits
++     * the advance of the last character from the calculation. This is
++     * intensional. For a printing character with a bitmap, it avoids
++     * padding of the boundary. But a space is nothing but padding, so
++     * a trailing space gets left out. This adds it in.
++     */
++    if (n_glyphs > 0 &&  /* conditional && */
++        (glyph_array + n_glyphs - 1)->glyph->image->bitmap.width == 0) {
++        if (pen.x < min_x) {
++            min_x = pen.x;
++        }
++        else if (pen.x > max_x) {
++            max_x = pen.x;
++        }
++        if (pen.y < min_y) {
++            min_y = pen.y;
++        }
++        else if (pen.y > max_y) {
++            max_y = pen.y;
++        }
++    }
++
+     fill_text_bounding_box(ftext, pen, min_x, max_x, min_y, max_y, top);
+ }
+ 

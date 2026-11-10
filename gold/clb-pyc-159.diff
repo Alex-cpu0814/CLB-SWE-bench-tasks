@@ -1,0 +1,86 @@
+diff --git a/CHANGES.rst b/CHANGES.rst
+index 9874643..1def2eb 100644
+--- a/CHANGES.rst
++++ b/CHANGES.rst
+@@ -1,3 +1,11 @@
++0.9 (unreleased)
++----------------
++
++- Fixed a bug that caused incorrect results in the weighted
++  1-d histogram and the weighted and unweighted 2-d histogram
++  functions if using arrays with different layouts in memory.
++  [#52]
++
+ 0.8 (2020-01-07)
+ ----------------
+ 
+diff --git a/fast_histogram/_histogram_core.c b/fast_histogram/_histogram_core.c
+index 8d4f68b..77512bf 100644
+--- a/fast_histogram/_histogram_core.c
++++ b/fast_histogram/_histogram_core.c
+@@ -302,7 +302,8 @@ static PyObject *_histogram2d(PyObject *self, PyObject *args) {
+   do {
+ 
+     /* Get the inner loop data/stride/count values */
+-    npy_intp stride = *strideptr;
++    npy_intp stride0 = strideptr[0];
++    npy_intp stride1 = strideptr[1];
+     npy_intp size = *innersizeptr;
+ 
+     /* This is a typical inner loop for NPY_ITER_EXTERNAL_LOOP */
+@@ -317,8 +318,8 @@ static PyObject *_histogram2d(PyObject *self, PyObject *args) {
+         count[iy + ny * ix] += 1.;
+       }
+ 
+-      dataptr[0] += stride;
+-      dataptr[1] += stride;
++      dataptr[0] += stride0;
++      dataptr[1] += stride1;
+     }
+ 
+   } while (iternext(iter));
+@@ -451,7 +452,8 @@ static PyObject *_histogram1d_weighted(PyObject *self, PyObject *args) {
+   do {
+ 
+     /* Get the inner loop data/stride/count values */
+-    npy_intp stride = *strideptr;
++    npy_intp stride0 = strideptr[0];
++    npy_intp stride1 = strideptr[1];
+     npy_intp size = *innersizeptr;
+ 
+     /* This is a typical inner loop for NPY_ITER_EXTERNAL_LOOP */
+@@ -465,8 +467,8 @@ static PyObject *_histogram1d_weighted(PyObject *self, PyObject *args) {
+         count[ix] += tw;
+       }
+ 
+-      dataptr[0] += stride;
+-      dataptr[1] += stride;
++      dataptr[0] += stride0;
++      dataptr[1] += stride1;
+     }
+ 
+   } while (iternext(iter));
+@@ -610,7 +612,9 @@ static PyObject *_histogram2d_weighted(PyObject *self, PyObject *args) {
+   do {
+ 
+     /* Get the inner loop data/stride/count values */
+-    npy_intp stride = *strideptr;
++    npy_intp stride0 = strideptr[0];
++    npy_intp stride1 = strideptr[1];
++    npy_intp stride2 = strideptr[2];
+     npy_intp size = *innersizeptr;
+ 
+     /* This is a typical inner loop for NPY_ITER_EXTERNAL_LOOP */
+@@ -626,9 +630,9 @@ static PyObject *_histogram2d_weighted(PyObject *self, PyObject *args) {
+         count[iy + ny * ix] += tw;
+       }
+ 
+-      dataptr[0] += stride;
+-      dataptr[1] += stride;
+-      dataptr[2] += stride;
++      dataptr[0] += stride0;
++      dataptr[1] += stride1;
++      dataptr[2] += stride2;
+     }
+ 
+   } while (iternext(iter));

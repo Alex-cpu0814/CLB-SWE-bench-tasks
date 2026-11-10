@@ -1,0 +1,66 @@
+diff --git a/.github/ISSUE_TEMPLATE/bug_report.md b/.github/ISSUE_TEMPLATE/bug_report.md
+index 3e239e5..ce928e8 100644
+--- a/.github/ISSUE_TEMPLATE/bug_report.md
++++ b/.github/ISSUE_TEMPLATE/bug_report.md
+@@ -24,9 +24,9 @@ If spglib returns different results by changing `symprec`, `angle_tolerance`, or
+ <!-- A clear and concise description of what you expected to happen. -->
+ 
+ ## Environment
+- 
+-- Python version: 
+-- Spglib's version: 
++
++- Python version:
++- Spglib's version:
+ 
+ ## Additional context
+ 
+diff --git a/doc/magnetic_symmetry_flags.md b/doc/magnetic_symmetry_flags.md
+index 828024b..6b14f5d 100644
+--- a/doc/magnetic_symmetry_flags.md
++++ b/doc/magnetic_symmetry_flags.md
+@@ -30,10 +30,10 @@
+ - `tensor_rank=1`
+     - `with_time_reversal=true`: {math}`1' \circ \mathbf{m} = -\mathbf{m}`
+         - `is_axial=true`: {math}`(\mathbf{R}, \mathbf{v}) \circ \mathbf{m} = (\mathrm{det} \mathbf{R}) \mathbf{R} \mathbf{m}`
+-        - `is_axial=true`: {math}`(\mathbf{R}, \mathbf{v}) \circ \mathbf{m} = \mathbf{R} \mathbf{m}`
++        - `is_axial=false`: {math}`(\mathbf{R}, \mathbf{v}) \circ \mathbf{m} = \mathbf{R} \mathbf{m}`
+     - `with_time_reversal=false`: {math}`1' \circ \mathbf{m} = \mathbf{m}`
+         - `is_axial=true`: {math}`(\mathbf{R}, \mathbf{v}) \circ \mathbf{m} = (\mathrm{det} \mathbf{R}) \mathbf{R} \mathbf{m}`
+-        - `is_axial=true`: {math}`(\mathbf{R}, \mathbf{v}) \circ \mathbf{m} = \mathbf{R} \mathbf{m}`
++        - `is_axial=false`: {math}`(\mathbf{R}, \mathbf{v}) \circ \mathbf{m} = \mathbf{R} \mathbf{m}`
+ 
+ <!-- ### Correspondence
+ 
+diff --git a/src/overlap.c b/src/overlap.c
+index 30a8f31..b73ab36 100644
+--- a/src/overlap.c
++++ b/src/overlap.c
+@@ -641,7 +641,7 @@ static int check_total_overlap_for_sorted(
+     search_start = 0;
+     for (i_orig = 0; i_orig < num_pos; i_orig++) {
+         /* Permanently skip positions filled near the beginning. */
+-        while (found[search_start]) {
++        while ((search_start < num_pos) && found[search_start]) {
+             search_start++;
+         }
+ 
+diff --git a/src/spin.c b/src/spin.c
+index 158c62e..c19240b 100644
+--- a/src/spin.c
++++ b/src/spin.c
+@@ -408,8 +408,12 @@ static MagneticSymmetry *get_operations(
+                 }
+             }
+             if (k == cell->size) {
+-                /* Unreachable here! */
+-                return NULL;
++                // Unreachable here in theory, but we rarely fail to overlap
++                // atoms possibly due to too high symprec. In that case, skip
++                // the symmetry operation.
++                debug_print("Failed to overlap atom-%d by operation-%d\n", j, i);
++                found = 0;
++                break;
+             }
+ 
+             // Skip if relevant tensors are zeros because they have nothing to

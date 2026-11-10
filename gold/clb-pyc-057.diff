@@ -1,0 +1,42 @@
+diff --git a/src/PIL/PsdImagePlugin.py b/src/PIL/PsdImagePlugin.py
+index e7b8846..04b21e3 100644
+--- a/src/PIL/PsdImagePlugin.py
++++ b/src/PIL/PsdImagePlugin.py
+@@ -22,6 +22,7 @@ from . import Image, ImageFile, ImagePalette
+ from ._binary import i8
+ from ._binary import i16be as i16
+ from ._binary import i32be as i32
++from ._binary import si16be as si16
+ 
+ MODES = {
+     # (photoshop mode, bits) -> (pil mode, required channels)
+@@ -179,7 +180,7 @@ def _layerinfo(fp, ct_bytes):
+     def read(size):
+         return ImageFile._safe_read(fp, size)
+ 
+-    ct = i16(read(2))
++    ct = si16(read(2))
+ 
+     # sanity check
+     if ct_bytes < (abs(ct) * 20):
+diff --git a/src/PIL/_binary.py b/src/PIL/_binary.py
+index 5564f45..a74ee9e 100644
+--- a/src/PIL/_binary.py
++++ b/src/PIL/_binary.py
+@@ -47,6 +47,16 @@ def si16le(c, o=0):
+     return unpack_from("<h", c, o)[0]
+ 
+ 
++def si16be(c, o=0):
++    """
++    Converts a 2-bytes (16 bits) string to a signed integer, big endian.
++
++    :param c: string containing bytes to convert
++    :param o: offset of bytes to convert in string
++    """
++    return unpack_from(">h", c, o)[0]
++
++
+ def i32le(c, o=0):
+     """
+     Converts a 4-bytes (32 bits) string to an unsigned integer.

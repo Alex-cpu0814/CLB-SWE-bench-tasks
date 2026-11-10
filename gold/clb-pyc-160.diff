@@ -1,0 +1,41 @@
+diff --git a/CHANGES.rst b/CHANGES.rst
+index 246a4e8..16aaa5a 100644
+--- a/CHANGES.rst
++++ b/CHANGES.rst
+@@ -1,7 +1,8 @@
+ 0.5 (unreleased)
+ ----------------
+ 
+-- No changes yet.
++- Fix bug that caused histograms of n-dimensional arrays to
++  not be computed correctly. [#21]
+ 
+ 0.4 (2018-02-12)
+ ----------------
+diff --git a/fast_histogram/histogram.py b/fast_histogram/histogram.py
+index afde42e..3fca89b 100644
+--- a/fast_histogram/histogram.py
++++ b/fast_histogram/histogram.py
+@@ -50,6 +50,9 @@ def histogram1d(x, bins, range, weights=None):
+ 
+     x = np.ascontiguousarray(x, np.float)
+ 
++    if x.ndim > 1:
++        x = x.ravel()
++
+     if weights is None:
+         return _histogram1d(x, nx, xmin, xmax)
+     else:
+@@ -114,6 +117,12 @@ def histogram2d(x, y, bins, range, weights=None):
+     x = np.ascontiguousarray(x, np.float)
+     y = np.ascontiguousarray(y, np.float)
+ 
++    if x.ndim > 1:
++        x = x.ravel()
++
++    if y.ndim > 1:
++        y = y.ravel()
++
+     if weights is None:
+         return _histogram2d(x, y, nx, xmin, xmax, ny, ymin, ymax)
+     else:

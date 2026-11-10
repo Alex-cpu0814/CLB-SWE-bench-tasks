@@ -1,0 +1,13 @@
+diff --git a/python/objToJSON.c b/python/objToJSON.c
+index d7be6f6..5d96485 100644
+--- a/python/objToJSON.c
++++ b/python/objToJSON.c
+@@ -783,7 +783,7 @@ PyObject* objToJSON(PyObject* self, PyObject *args, PyObject *kwargs)
+ 
+   PRINTMARK();
+ 
+-  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|OOOOpii", kwlist, &oinput, &oensureAscii, &oencodeHTMLChars, &oescapeForwardSlashes, &osortKeys, &encoder.indent, &allowNan, &orejectBytes))
++  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|OOOOiii", kwlist, &oinput, &oensureAscii, &oencodeHTMLChars, &oescapeForwardSlashes, &osortKeys, &encoder.indent, &allowNan, &orejectBytes))
+   {
+     return NULL;
+   }

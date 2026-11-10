@@ -1,0 +1,13 @@
+diff --git a/src/_freetype.c b/src/_freetype.c
+index ae05a337d..8ec3bb6b2 100644
+--- a/src/_freetype.c
++++ b/src/_freetype.c
+@@ -1418,7 +1418,7 @@ _ftfont_getrect(PgFontObject *self, PyObject *args, PyObject *kwds)
+ 
+     FontRenderMode render;
+     Angle_t rotation = self->rotation;
+-    int style = 0;
++    int style = FT_STYLE_DEFAULT;
+ 
+     if (!PyArg_ParseTupleAndKeywords(args, kwds, "O|iO&O&", kwlist,
+                                      &textobj, &style,
