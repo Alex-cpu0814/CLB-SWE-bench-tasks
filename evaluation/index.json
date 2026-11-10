@@ -162,8 +162,8 @@
       "cohort": "python50",
       "base_commit": "663b161074580a340201da1765e3618c086ff8dc",
       "image": {
-        "image_id": "sha256:19d9e4c60528969fa655ade3622e48b0c85c508ccd6249e801d6781bef11f508",
-        "pull_reference": "yutu0814/pyc-case-013-numpy@sha256:19d9e4c60528969fa655ade3622e48b0c85c508ccd6249e801d6781bef11f508"
+        "image_id": "sha256:26aed6981a311bac66e55dd963a2a0cc5d65417aaca7a98895c4c11704579dd8",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-pyc-013@sha256:26aed6981a311bac66e55dd963a2a0cc5d65417aaca7a98895c4c11704579dd8"
       },
       "files": [
         {
@@ -172,7 +172,7 @@
         },
         {
           "path": "cases/case013/evaluator/case_config.json",
-          "sha256": "f71db2a82797c5d3e631a1129d254239d3564dc4902b104d8d48de01df8cc2aa"
+          "sha256": "c764eae9c48f1c313f85b6db0dd9527e3cca664ab655119489f9a4bd3d9d4627"
         },
         {
           "path": "cases/case013/evaluator/evaluate_model_patch.py",
@@ -199,8 +199,8 @@
       "cohort": "python50",
       "base_commit": "495d352bf325f44d78001f059d625123e49f027e",
       "image": {
-        "image_id": "sha256:8ec3a832740cfffca716ebf9a7a1b9b324d57ca877843e324a74f53f49942c4d",
-        "pull_reference": "yutu0814/pyc-case-014-numpy@sha256:8ec3a832740cfffca716ebf9a7a1b9b324d57ca877843e324a74f53f49942c4d"
+        "image_id": "sha256:a074017c1ebfe6adf757e72e61f6d1adc10bca8cbfda0931b9fece832e952535",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-pyc-014@sha256:a074017c1ebfe6adf757e72e61f6d1adc10bca8cbfda0931b9fece832e952535"
       },
       "files": [
         {
@@ -209,7 +209,7 @@
         },
         {
           "path": "cases/case014/evaluator/case_config.json",
-          "sha256": "f784a28acdedda6b5789b38239427720a339ee23e0dd9bfc4c22a7f38cabd27a"
+          "sha256": "b2e8777035e92a62822139c46ef59898a8e0e5aeaa16731b880796fe22905ae1"
         },
         {
           "path": "cases/case014/evaluator/evaluate_model_patch.py",
@@ -236,8 +236,8 @@
       "cohort": "python50",
       "base_commit": "965ea2ff417bcb285beca5c36cd02a8790a3d8f6",
       "image": {
-        "image_id": "sha256:f2da0afcaca3b41ce053ae0355187005b364e3490eda7dbeecac6561e03d5967",
-        "pull_reference": "yutu0814/pyc-case-015-numpy@sha256:f2da0afcaca3b41ce053ae0355187005b364e3490eda7dbeecac6561e03d5967"
+        "image_id": "sha256:e5c51d395a823b4da66ba0a7620336cf0f7f0fb4bc1e3758453c37e1a9090c0f",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-pyc-015@sha256:e5c51d395a823b4da66ba0a7620336cf0f7f0fb4bc1e3758453c37e1a9090c0f"
       },
       "files": [
         {
@@ -246,7 +246,7 @@
         },
         {
           "path": "cases/case015/evaluator/case_config.json",
-          "sha256": "158bd4d092af19354d9b9ae8210a7f5cbca59f9c9a12e81a4ed354860b0e2027"
+          "sha256": "d878de8da733940d8dc58cde0f7d98d3b8401a62d432381e13c5ffad1382ebb2"
         },
         {
           "path": "cases/case015/evaluator/evaluate_model_patch.py",

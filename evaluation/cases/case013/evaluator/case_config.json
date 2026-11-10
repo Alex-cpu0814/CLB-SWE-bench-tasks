@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/numpy/numpy.git",
   "base_commit": "663b161074580a340201da1765e3618c086ff8dc",
   "fix_commit": "3d31770c61ea2412267c233d38ccc33d5d3a0610",
-  "image": "yutu0814/pyc-case-013-numpy:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-pyc-013@sha256:26aed6981a311bac66e55dd963a2a0cc5d65417aaca7a98895c4c11704579dd8",
   "python_version": "3.8-dbg",
   "numpy_version": "source-1.18.0.dev0",
   "extra_apt_packages": [],
