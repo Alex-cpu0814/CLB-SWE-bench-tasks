@@ -235,8 +235,8 @@
       "cohort": "python50",
       "base_commit": "e13278e712ac33c6110b5d48a8da0acfa7768b71",
       "image": {
-        "image_id": "sha256:162ec26dfa62fdd3ffa1a0dc4976961257e6796f803eb39e11be871f1dc4faf9",
-        "pull_reference": "yutu0814/pyc-case-041-scipy@sha256:162ec26dfa62fdd3ffa1a0dc4976961257e6796f803eb39e11be871f1dc4faf9"
+        "image_id": "sha256:7569230e198bc615b00aa876ce2d38c95dccc51c6d3d57a18315bf954030d34f",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-python-c-041@sha256:7569230e198bc615b00aa876ce2d38c95dccc51c6d3d57a18315bf954030d34f"
       },
       "generation_python": "python3.8",
       "task": {
@@ -252,8 +252,8 @@
       "cohort": "python50",
       "base_commit": "8c7973148c5dea4a28e0e082f8c1f182313b72c1",
       "image": {
-        "image_id": "sha256:73a308a6d0431d6f5d682647daf0828549209bc26bf7e79d2bff7e205d7d2bcb",
-        "pull_reference": "yutu0814/pyc-case-042-scipy@sha256:73a308a6d0431d6f5d682647daf0828549209bc26bf7e79d2bff7e205d7d2bcb"
+        "image_id": "sha256:8b818160f243dac40b51a4ad7898039b6960e8dd5904881545ebdf574e9b73b2",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-python-c-042@sha256:8b818160f243dac40b51a4ad7898039b6960e8dd5904881545ebdf574e9b73b2"
       },
       "generation_python": "python3.8",
       "task": {
