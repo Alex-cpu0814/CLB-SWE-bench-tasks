@@ -354,8 +354,8 @@
       "cohort": "python50",
       "base_commit": "c683f048eb117c572b8b4eee47a324aca165fea1",
       "image": {
-        "image_id": "sha256:418f1ca7c0fe0f3525592d3635a6e06f4e7b45060ad3b0a492f177230eba26fe",
-        "pull_reference": "yutu0814/pyc-case-054-pillow@sha256:418f1ca7c0fe0f3525592d3635a6e06f4e7b45060ad3b0a492f177230eba26fe"
+        "image_id": "sha256:50c3363f0d07df3f1033fb42c8eeeded36cdfb26b5d6cb4d8449d0fc57f890b6",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-python-c-054@sha256:50c3363f0d07df3f1033fb42c8eeeded36cdfb26b5d6cb4d8449d0fc57f890b6"
       },
       "generation_python": "python",
       "task": {
@@ -371,8 +371,8 @@
       "cohort": "python50",
       "base_commit": "6798c87caf25cedf0cef19245e7db1656aed8602",
       "image": {
-        "image_id": "sha256:abeb4e9ddc951a5c0e9d63f1d5d0c23a8c0bcb668606cfab3e67adde60b76970",
-        "pull_reference": "yutu0814/pyc-case-056-pillow@sha256:abeb4e9ddc951a5c0e9d63f1d5d0c23a8c0bcb668606cfab3e67adde60b76970"
+        "image_id": "sha256:fc777915271e0b37d9e1a6482ae89355d1a56964ee798cbf01dffa15fba985e9",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-python-c-056@sha256:fc777915271e0b37d9e1a6482ae89355d1a56964ee798cbf01dffa15fba985e9"
       },
       "generation_python": "python",
       "task": {
