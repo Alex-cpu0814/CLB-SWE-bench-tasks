@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/CheetahTemplate3/cheetah3.git",
   "base_commit": "c86628cad04edc5167f9a9c8999abc62c6558e7b",
   "fix_commit": "31574d601ed6b675eb2fe8dc82659864bd3ace14",
-  "image": "yutu0814/pyc-case-049-cheetah:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-049@sha256:61c541841763cde53bfa8f7988af1fe529a675a5612c6a39fc45d2bb56c5ff85",
   "python_version": "3.8",
   "numpy_version": "1.19.5",
   "extra_apt_packages": [],

@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/tskit-dev/tskit.git",
   "base_commit": "eb8b4aebe42f39f7e536a603e8cd25d9cf104e22",
   "fix_commit": "568a9a953d549ae9a48f0f6d98435249841b7b5e",
-  "image": "yutu0814/pyc-case-046-tskit:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-046@sha256:38fcbddcdd4bdf3684f08e3f12085a58b460218c0a9e15a05539aeecb3580a7b",
   "python_version": "3.8",
   "numpy_version": "1.19.5",
   "extra_apt_packages": [],
