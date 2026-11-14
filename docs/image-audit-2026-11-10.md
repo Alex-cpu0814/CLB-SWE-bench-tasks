@@ -15,26 +15,26 @@ F2P 是目标测试，P2P 是回归测试。表中依次为 F2P 和 P2P 的通�
 
 | 任务 | 已审核的 Docker Hub 标签 | Base（F2P，P2P） | Gold（F2P，P2P） |
 |---|---|---|---|
-| `clb-pyc-086` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-pyc-086/tags) | 0/2，2/2 | 2/2，2/2 |
-| `clb-pyc-077` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-pyc-077/tags) | 0/1，3/3 | 1/1，3/3 |
-| `clb-pyc-081` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-pyc-081/tags) | 0/1，3/3 | 1/1，3/3 |
-| `clb-pyc-082` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-pyc-082/tags) | 0/2，2/2 | 2/2，2/2 |
-| `clb-pyc-075` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-pyc-075/tags) | 0/1，3/3 | 1/1，3/3 |
-| `clb-pyc-090` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-pyc-090/tags) | 0/1，3/3 | 1/1，3/3 |
-| `clb-pyc-091` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-pyc-091/tags) | 0/1，3/3 | 1/1，3/3 |
+| `clb-pyc-086` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-python-c-086/tags) | 0/2，2/2 | 2/2，2/2 |
+| `clb-pyc-077` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-python-c-077/tags) | 0/1，3/3 | 1/1，3/3 |
+| `clb-pyc-081` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-python-c-081/tags) | 0/1，3/3 | 1/1，3/3 |
+| `clb-pyc-082` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-python-c-082/tags) | 0/2，2/2 | 2/2，2/2 |
+| `clb-pyc-075` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-python-c-075/tags) | 0/1，3/3 | 1/1，3/3 |
+| `clb-pyc-090` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-python-c-090/tags) | 0/1，3/3 | 1/1，3/3 |
+| `clb-pyc-091` | [`v2`](https://hub.docker.com/r/yutu0814/clb.eval.x86_64.clb-python-c-091/tags) | 0/1，3/3 | 1/1，3/3 |
 
 ## 固定镜像引用
 
 以下引用已与任务仓库的 [镜像索引](../tasks/index.json) 核对。
 
 ~~~text
-yutu0814/clb.eval.x86_64.clb-pyc-086@sha256:2f4eebff2144f1993172f297882f97c43bfde95fe9aba6361c99455e7fe6a724
-yutu0814/clb.eval.x86_64.clb-pyc-077@sha256:7707b84c946a4597488097a8db50e6fa4732fd7612035c723cbd95d2e7a1103f
-yutu0814/clb.eval.x86_64.clb-pyc-081@sha256:05fb0b27f5330e9a842d9e3263020c214623933f2eb2cb590f2e95737f647457
-yutu0814/clb.eval.x86_64.clb-pyc-082@sha256:dcf5deee19c7b652635dc85f52b205afeed4862a8318955cca32dc25cd0033d5
-yutu0814/clb.eval.x86_64.clb-pyc-075@sha256:7b465322ad5678d225697bb7e633a00a47d91702620bf5547e386c627d04d3fe
-yutu0814/clb.eval.x86_64.clb-pyc-090@sha256:0885aad791f682a1089d444fe3922271eaeeeae285708c62c2a46505c77b5d08
-yutu0814/clb.eval.x86_64.clb-pyc-091@sha256:5ee498265139a4da765c6383ccaf11bed389557c29b1094c6dc8cc8c6141a931
+yutu0814/clb.eval.x86_64.clb-python-c-086@sha256:2f4eebff2144f1993172f297882f97c43bfde95fe9aba6361c99455e7fe6a724
+yutu0814/clb.eval.x86_64.clb-python-c-077@sha256:7707b84c946a4597488097a8db50e6fa4732fd7612035c723cbd95d2e7a1103f
+yutu0814/clb.eval.x86_64.clb-python-c-081@sha256:05fb0b27f5330e9a842d9e3263020c214623933f2eb2cb590f2e95737f647457
+yutu0814/clb.eval.x86_64.clb-python-c-082@sha256:dcf5deee19c7b652635dc85f52b205afeed4862a8318955cca32dc25cd0033d5
+yutu0814/clb.eval.x86_64.clb-python-c-075@sha256:7b465322ad5678d225697bb7e633a00a47d91702620bf5547e386c627d04d3fe
+yutu0814/clb.eval.x86_64.clb-python-c-090@sha256:0885aad791f682a1089d444fe3922271eaeeeae285708c62c2a46505c77b5d08
+yutu0814/clb.eval.x86_64.clb-python-c-091@sha256:5ee498265139a4da765c6383ccaf11bed389557c29b1094c6dc8cc8c6141a931
 ~~~
 
 ## 任务仓库更新

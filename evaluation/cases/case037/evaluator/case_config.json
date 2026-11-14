@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/scipy/scipy.git",
   "base_commit": "bf05e8d3412e2d96ab6735b6935e2a65f2620c30",
   "fix_commit": "2a2d8be5f52481938c817eb7150fe7152958853d",
-  "image": "yutu0814/clb.eval.x86_64.clb-pyc-037@sha256:38f50501f942d7d6fc5a5e80b08741c6cf762820815f59cb9205ea3f9bc53a5c",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-037@sha256:38f50501f942d7d6fc5a5e80b08741c6cf762820815f59cb9205ea3f9bc53a5c",
   "python_version": "3.8",
   "numpy_version": "1.17.5",
   "extra_apt_packages": [],

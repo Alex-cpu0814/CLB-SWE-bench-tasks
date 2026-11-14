@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/numpy/numpy.git",
   "base_commit": "fc2518ba6b11fc52b0ff477b9e83576be90562d8",
   "fix_commit": "a9652077be95f83f56c9b77e7ad1ed7710516626",
-  "image": "yutu0814/clb.eval.x86_64.clb-pyc-007@sha256:095e7deb5313f084f8163bb0e0871b0335a7df154866cc68dc2f38da16531233",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-007@sha256:095e7deb5313f084f8163bb0e0871b0335a7df154866cc68dc2f38da16531233",
   "python_version": "3.8-dbg",
   "numpy_version": "source-1.20.0.dev0",
   "extra_apt_packages": [],

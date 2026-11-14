@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/pygame/pygame.git",
   "base_commit": "71c90cdb76cd8b12a0969f5d6314315bd0223c28",
   "fix_commit": "1aeecd40314ec00c93d975b31a1f4518979d49a9",
-  "image": "yutu0814/clb.eval.x86_64.clb-pyc-081@sha256:05fb0b27f5330e9a842d9e3263020c214623933f2eb2cb590f2e95737f647457",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-081@sha256:05fb0b27f5330e9a842d9e3263020c214623933f2eb2cb590f2e95737f647457",
   "python_version": "3.8",
   "numpy_version": "not required",
   "extra_apt_packages": [],
