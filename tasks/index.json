@@ -1155,8 +1155,8 @@
       "cohort": "java_upstream11",
       "base_commit": "ba3d20f60e7fbf1a49ae1f4bac09111299d104ee",
       "image": {
-        "image_id": "sha256:15fcd1b85e32e2b60df81e65888a891648cf05421aece7b8fbaa0e829be75e24",
-        "pull_reference": "yutu0814/javac-case-160-junixsocket@sha256:15fcd1b85e32e2b60df81e65888a891648cf05421aece7b8fbaa0e829be75e24"
+        "image_id": "sha256:7c45280d2fa56940c7719e99eed52edcf9f6254360bd47af271aa24c6a8ff7fb",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-160@sha256:7c45280d2fa56940c7719e99eed52edcf9f6254360bd47af271aa24c6a8ff7fb"
       },
       "generation_python": "discover_image_default",
       "task": {

@@ -12,9 +12,9 @@
   },
   "hugging_face": {
     "dataset": "Alex-cpu0814/CLB-SWE-bench",
-    "revision": "95aa99829c466453595f86e401f0ea947d6a58a2",
+    "revision": "7ffd7b16e4fc110c15078600ce48500db6904ad2",
     "file": "test.jsonl",
-    "sha256": "f55cb79fd7d715fd9bf5d862b20c9e2f368efaa48344a67e5b39824137df9049"
+    "sha256": "5e04a1202015cc800380cef3af8042d799615750ebb5cf38471f179b14a7bfc8"
   },
   "gold_patches": {
     "gold/clb-javac-056.diff": "326c6b4cdd6cd026bebf83b8e9704144a94bbb96b85cac860da1eb14a66a87e5",
