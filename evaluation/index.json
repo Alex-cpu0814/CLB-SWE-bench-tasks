@@ -2909,8 +2909,8 @@
       "cohort": "java_upstream11",
       "base_commit": "2a159927761424440f7dbd7674992e4b5273a459",
       "image": {
-        "image_id": "sha256:d5eaaed040c90536d22f0ef5548ad00d2ec61b59e698d725014695479df8a20d",
-        "pull_reference": "yutu0814/javac-case-175-junixsocket@sha256:d5eaaed040c90536d22f0ef5548ad00d2ec61b59e698d725014695479df8a20d"
+        "image_id": "sha256:94f2d0c8e23d5fcf5c423a54d8348136df6c891adb863910303fd41fdcd113d5",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-175@sha256:94f2d0c8e23d5fcf5c423a54d8348136df6c891adb863910303fd41fdcd113d5"
       },
       "files": [
         {
@@ -2919,7 +2919,7 @@
         },
         {
           "path": "cases/javac_case_175/evaluator/case_config.json",
-          "sha256": "d5f0d5a7187e622f0fe172d3ea6754a58d5e87d5ba4f5b9906da907f687902fc"
+          "sha256": "7a351d05a1c56dccac4f320db23ac049263cb8e35d6d3d57664f2b6cf9666370"
         },
         {
           "path": "cases/javac_case_175/evaluator/evaluate_model_patch.py",
@@ -2995,8 +2995,8 @@
       "cohort": "java_upstream11",
       "base_commit": "f6c82e695f5b6964daeec2c4e0bc449a89be892a",
       "image": {
-        "image_id": "sha256:77c71ce09d01e830e0b98f3607636f0ffb03abc24ad51498190f6e7e0fb961dd",
-        "pull_reference": "yutu0814/javac-case-200-mdsplus@sha256:77c71ce09d01e830e0b98f3607636f0ffb03abc24ad51498190f6e7e0fb961dd"
+        "image_id": "sha256:540d1b56d89a81f690d9cafa09dc5f2310d58d20c3fd6d7d0b213e6cd8ba44b5",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-200@sha256:540d1b56d89a81f690d9cafa09dc5f2310d58d20c3fd6d7d0b213e6cd8ba44b5"
       },
       "files": [
         {
@@ -3005,7 +3005,7 @@
         },
         {
           "path": "cases/javac_case_200/evaluator/case_config.json",
-          "sha256": "0bd6a7a1b2cfe3df30cf5d1ee6de7b3455729171fac40c425006889897bcd14a"
+          "sha256": "f27b0d652c4a9b531cc90f8517d4f8a0f7729861b75b4a8f569ef1af083e0cfd"
         },
         {
           "path": "cases/javac_case_200/evaluator/evaluate_model_patch.py",
