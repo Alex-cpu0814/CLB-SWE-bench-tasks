@@ -2069,8 +2069,8 @@
       "cohort": "java_author11",
       "base_commit": "2c8811383487cd827f375abdc534a5d40a174edc",
       "image": {
-        "image_id": "sha256:a6b182c03068ba6e408878304674f3a8ae922f42b6399c3f1b82fd34166a40a5",
-        "pull_reference": "yutu0814/javac-case-062-lwjgl3@sha256:a6b182c03068ba6e408878304674f3a8ae922f42b6399c3f1b82fd34166a40a5"
+        "image_id": "sha256:90695470bc689abb88d9d3d143bd855105f9daaa5abb0917c4289032cfcea0c6",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-062@sha256:90695470bc689abb88d9d3d143bd855105f9daaa5abb0917c4289032cfcea0c6"
       },
       "files": [
         {
@@ -2083,7 +2083,7 @@
         },
         {
           "path": "cases/javac_case_062/evaluator/case_config.json",
-          "sha256": "441d0bcf4566b88dc666364ec54f752ebabf2e7778cf98988582e897f93df953"
+          "sha256": "f170d885155d52a13a10daf3710a432b37d31863bee112d94f98dc006caa8bc9"
         },
         {
           "path": "cases/javac_case_062/evaluator/evaluate_model_patch.py",
