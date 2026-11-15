@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/bcdev/jpy.git",
   "base_commit": "7e58cea7c2551d0b590eff3959341ee823ec43c1",
   "fix_commit": "58f81d92b6fdf4bf2623b88a1414ba64bfc18788",
-  "image": "yutu0814/pyc-case-177-jpy:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-177@sha256:07fcc15bbe16c11425ca3cf8bf5b02e5b40ace448d3273bf58a77e3ae4c0261b",
   "python_version": "2.7",
   "extra_apt_packages": [],
   "runtime_assets": [

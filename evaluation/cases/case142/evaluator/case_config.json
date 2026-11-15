@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/pygobject/pycairo.git",
   "base_commit": "cd6b840aeab1515343a71a997b0a2ce48fce6d82",
   "fix_commit": "07ee64b3fb51a16ded90822a0fb00cb8b180b839",
-  "image": "yutu0814/pyc-case-142-pycairo:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-142@sha256:1831255b03ea80c31faf6e37a0e02b3eab8406bcfc9c4f7894f67a98777af5ac",
   "python_version": "3.6",
   "numpy_version": "not required",
   "extra_apt_packages": [],

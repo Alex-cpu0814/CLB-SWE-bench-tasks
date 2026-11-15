@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/MDSplus/mdsplus.git",
   "base_commit": "a73d6e87149698e49026e3bf8055efc6bbe71d90",
   "fix_commit": "687b2621aa4dcebc3cc5ee9cd780f38fefd8af87",
-  "image": "yutu0814/javac-case-194-mdsplus:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-java-c-194@sha256:4a23634a02e8846e3e6a04d44f186a2b283aa49f5cabc148d5b0b6a2d2d7c0b9",
   "python_version": "3.8",
   "python_sha256": "system-package",
   "extra_apt_packages": [

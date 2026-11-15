@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/python-pillow/Pillow.git",
   "base_commit": "dc1664500be0135d83182d480af341d39b5c78d7",
   "fix_commit": "6e2075e25d49fa0ffaec5892b64e3dd4cd39a9fd",
-  "image": "yutu0814/pyc-case-068-pillow:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-068@sha256:c1c738bf7d0cfe72ae735bdb2c7bddb96f0c3d4131e0762f5e1693091266681f",
   "python_version": "3.8",
   "numpy_version": "not required",
   "extra_apt_packages": [],

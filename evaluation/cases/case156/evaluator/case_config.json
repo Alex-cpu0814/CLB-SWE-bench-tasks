@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/ghaering/pysqlite.git",
   "base_commit": "d7c44a6b62ccf27ae2a006d32dc25cd49ca45320",
   "fix_commit": "9b23d8d2863715e3654a8bb4a33483aa5adf40fd",
-  "image": "yutu0814/pyc-case-156-pysqlite:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-156@sha256:8b2bcaa9d01fd6d7d8d9c7188699d3b88328d98eeffbf0fe755738bcb0bcf31e",
   "python_version": "2.7",
   "numpy_version": "not required",
   "extra_apt_packages": [],
