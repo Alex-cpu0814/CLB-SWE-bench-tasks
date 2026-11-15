@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/ninia/jep.git",
   "base_commit": "bbf96b5cbb83fe9e4edef71d410d29460084d5fc",
   "fix_commit": "d2ab3f0343a518948ee44f09279e7ccf6922b856",
-  "image": "javac-case-100-jep:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-java-c-100@sha256:4242937c5af25549c8e96b621a12ba12e7eeb418dbbd74ae32d774e7c3bead9d",
   "python_version": "2.7.18",
   "python_sha256": "DA3080E3B488F648A3D7A4560DDEE895284C3380B11D6DE75EDB986526B9A814",
   "extra_apt_packages": [],

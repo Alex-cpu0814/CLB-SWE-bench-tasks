@@ -1087,8 +1087,8 @@
       "cohort": "java_upstream11",
       "base_commit": "bbf96b5cbb83fe9e4edef71d410d29460084d5fc",
       "image": {
-        "image_id": "sha256:be480bb4f1310e82d3b624cc62a6901dc084b6db19bd16ae44a50d19400e22bb",
-        "pull_reference": "yutu0814/javac-case-100-jep@sha256:be480bb4f1310e82d3b624cc62a6901dc084b6db19bd16ae44a50d19400e22bb"
+        "image_id": "sha256:4242937c5af25549c8e96b621a12ba12e7eeb418dbbd74ae32d774e7c3bead9d",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-100@sha256:4242937c5af25549c8e96b621a12ba12e7eeb418dbbd74ae32d774e7c3bead9d"
       },
       "generation_python": "discover_image_default",
       "task": {
