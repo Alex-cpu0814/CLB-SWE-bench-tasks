@@ -1018,8 +1018,8 @@
       "cohort": "java_author11",
       "base_commit": "90716d6008c5c9cfa8a061f3d23531acaea29777",
       "image": {
-        "image_id": "sha256:c8b7c236569b9eb461c66197356b0b109088ce31fd0f0057f5441a3afb99e497",
-        "pull_reference": "yutu0814/javac-case-163-junixsocket@sha256:c8b7c236569b9eb461c66197356b0b109088ce31fd0f0057f5441a3afb99e497"
+        "image_id": "sha256:66991b49f6afdc71a0301b365bf2f819dcb4749dcd5f45220d0a7230cd94ecfa",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-163@sha256:66991b49f6afdc71a0301b365bf2f819dcb4749dcd5f45220d0a7230cd94ecfa"
       },
       "generation_python": "discover_image_default",
       "task": {
