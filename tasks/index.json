@@ -1035,8 +1035,8 @@
       "cohort": "java_author11",
       "base_commit": "71a134bce58a22fb17a7a14f00799196c0c71a60",
       "image": {
-        "image_id": "sha256:1a70b55b3d05b7f18257b238ba0ab246f055b03023eb9483d1cafc58703fbde3",
-        "pull_reference": "yutu0814/javac-case-170-junixsocket@sha256:1a70b55b3d05b7f18257b238ba0ab246f055b03023eb9483d1cafc58703fbde3"
+        "image_id": "sha256:5de28a9f42b32715873637ae3b602cbd93b1f2a34e2e258efda3decd69edfadb",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-170@sha256:5de28a9f42b32715873637ae3b602cbd93b1f2a34e2e258efda3decd69edfadb"
       },
       "generation_python": "discover_image_default",
       "task": {
@@ -1104,8 +1104,8 @@
       "cohort": "java_upstream11",
       "base_commit": "4f5ec07c315872bdee0885be085ebf57cede2db9",
       "image": {
-        "image_id": "sha256:33a22445240b5d6abba03d5c41a277d721fc8940f51aa3e7b7138daeb2f87305",
-        "pull_reference": "yutu0814/javac-case-112-openjpeg@sha256:33a22445240b5d6abba03d5c41a277d721fc8940f51aa3e7b7138daeb2f87305"
+        "image_id": "sha256:4a430d91af964c217ec712915e674c51abb807646b75882f2a637ee1977daecc",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-112@sha256:4a430d91af964c217ec712915e674c51abb807646b75882f2a637ee1977daecc"
       },
       "generation_python": "discover_image_default",
       "task": {

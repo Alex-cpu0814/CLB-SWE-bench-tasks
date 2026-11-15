@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/uclouvain/openjpeg.git",
   "base_commit": "4f5ec07c315872bdee0885be085ebf57cede2db9",
   "fix_commit": "5d953558de8dc4d939b8147fe9547533a8804297",
-  "image": "javac-case-112-openjpeg:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-java-c-112@sha256:4a430d91af964c217ec712915e674c51abb807646b75882f2a637ee1977daecc",
   "python_version": "3.11",
   "python_sha256": "unused",
   "extra_apt_packages": ["cmake", "curl", "default-jdk-headless", "gcc-multilib", "g++-multilib", "git", "make"],
