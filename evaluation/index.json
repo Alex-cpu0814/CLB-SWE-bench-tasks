@@ -2118,8 +2118,8 @@
       "cohort": "java_author11",
       "base_commit": "2c007161cff7ba12023ae48dd28a7856c0c6da3d",
       "image": {
-        "image_id": "sha256:30a5258e746b1190c9b5d6c6aacbbaa04bdd0f11f4aff0b5605a3eeb8445dfaa",
-        "pull_reference": "yutu0814/javac-case-068-lwjgl3@sha256:30a5258e746b1190c9b5d6c6aacbbaa04bdd0f11f4aff0b5605a3eeb8445dfaa"
+        "image_id": "sha256:bc2a61ae55e65770bc4c86330ba20ecfc8e2afd2497f86fcd184ce80cd73c805",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-068@sha256:bc2a61ae55e65770bc4c86330ba20ecfc8e2afd2497f86fcd184ce80cd73c805"
       },
       "files": [
         {
@@ -2132,7 +2132,7 @@
         },
         {
           "path": "cases/javac_case_068/evaluator/case_config.json",
-          "sha256": "273827fd9b91b942f1909ae989dc56bd2d2f50360eae68480059f999e6b9c85e"
+          "sha256": "665b283fcbcc0d195ad06af6ce77340065dd059c517002a851b9b8c69e2d1ca9"
         },
         {
           "path": "cases/javac_case_068/evaluator/evaluate_model_patch.py",
@@ -2167,8 +2167,8 @@
       "cohort": "java_author11",
       "base_commit": "1fa5a394949cad836a104d8e5093f734d26ff8e1",
       "image": {
-        "image_id": "sha256:bf12eb7755f877cb56804e10e4a1336856d076f7fe76c92935124febce443226",
-        "pull_reference": "yutu0814/javac-case-074-lwjgl3@sha256:bf12eb7755f877cb56804e10e4a1336856d076f7fe76c92935124febce443226"
+        "image_id": "sha256:b44598bbab33b72ad28c9e23a9b635689fbe9ba38391f551fa2fede76f82da8d",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-074@sha256:b44598bbab33b72ad28c9e23a9b635689fbe9ba38391f551fa2fede76f82da8d"
       },
       "files": [
         {
@@ -2181,7 +2181,7 @@
         },
         {
           "path": "cases/javac_case_074/evaluator/case_config.json",
-          "sha256": "fc3993e8400037473d41e212d5b8dd929f52521f6f253b91532c7aee9c3f02be"
+          "sha256": "ad5b878d4b1e682f3692d319e3992094476ed51fce91ba054bf5d5ba2b447852"
         },
         {
           "path": "cases/javac_case_074/evaluator/evaluate_model_patch.py",

@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/LWJGL/lwjgl3.git",
   "base_commit": "1fa5a394949cad836a104d8e5093f734d26ff8e1",
   "fix_commit": "4fb6618bfd8990b8a0b805f589a76ff4a1b56684",
-  "image": "yutu0814/javac-case-074-lwjgl3@sha256:bf12eb7755f877cb56804e10e4a1336856d076f7fe76c92935124febce443226",
+  "image": "yutu0814/clb.eval.x86_64.clb-java-c-074@sha256:b44598bbab33b72ad28c9e23a9b635689fbe9ba38391f551fa2fede76f82da8d",
   "build_image": "local/javac-case-074-lwjgl3:benchmark-v1",
   "oracle_type": "runtime_behavior",
   "evaluator_mode": "isolated_exact_base_pointer_initialization_probe",
