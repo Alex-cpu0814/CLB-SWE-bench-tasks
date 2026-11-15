@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/scipy/scipy.git",
   "base_commit": "ff177d92b79167eb5de593c9de41d3ceb97ab189",
   "fix_commit": "60dc9730d5652f0632cd43caef437f01a734e374",
-  "image": "yutu0814/pyc-case-002-scipy:benchmark-v3",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-002@sha256:e3ed1ee056df1b5f199dc4d1dc88f17286f8e814ad0d3d301e789589dfbfb24c",
   "python_version": "3.9",
   "numpy_version": "1.19.5",
   "extra_apt_packages": [],

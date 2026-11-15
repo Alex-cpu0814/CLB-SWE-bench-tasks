@@ -14,8 +14,8 @@
       "cohort": "python50",
       "base_commit": "ff177d92b79167eb5de593c9de41d3ceb97ab189",
       "image": {
-        "image_id": "sha256:a06dba0866df6cc6a1b517fb2516808a1afb412e1ced4adb6fec3518c33cc617",
-        "pull_reference": "yutu0814/pyc-case-002-scipy@sha256:a06dba0866df6cc6a1b517fb2516808a1afb412e1ced4adb6fec3518c33cc617"
+        "image_id": "sha256:e3ed1ee056df1b5f199dc4d1dc88f17286f8e814ad0d3d301e789589dfbfb24c",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-python-c-002@sha256:e3ed1ee056df1b5f199dc4d1dc88f17286f8e814ad0d3d301e789589dfbfb24c"
       },
       "generation_python": "python",
       "task": {
