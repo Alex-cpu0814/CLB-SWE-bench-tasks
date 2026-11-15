@@ -2319,8 +2319,8 @@
       "cohort": "java_author11",
       "base_commit": "bc2edaf0242736c2a2940104eebc6aed5a3ad9e6",
       "image": {
-        "image_id": "sha256:afb82e4d2a5d2d58231b723073e32e41abfcdb48272923fbe8bb207908efd859",
-        "pull_reference": "yutu0814/javac-case-094-jep@sha256:afb82e4d2a5d2d58231b723073e32e41abfcdb48272923fbe8bb207908efd859"
+        "image_id": "sha256:1ba80ac6b994a6d17cf4b3b7e8133c0aba6330000873b9cebda6fc4b023c3676",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-094@sha256:1ba80ac6b994a6d17cf4b3b7e8133c0aba6330000873b9cebda6fc4b023c3676"
       },
       "files": [
         {
@@ -2329,7 +2329,7 @@
         },
         {
           "path": "cases/javac_case_094/evaluator/case_config.json",
-          "sha256": "219da8b1dee0621c2c36eff63af666185963405c7b9caf6d14a98b6e13a8fd18"
+          "sha256": "ccc3cae3c620925dd1203597368e42b225ec50c3fa2fa6a36aa65431c90994b4"
         },
         {
           "path": "cases/javac_case_094/evaluator/evaluate_model_patch.py",
@@ -2602,8 +2602,8 @@
       "cohort": "java_upstream11",
       "base_commit": "d14567567ac1281e978790b9170c981113de282f",
       "image": {
-        "image_id": "sha256:da9c9293093a89f2cfd0e2d584077080c640f0c002cef0589c64e28ac6b550d4",
-        "pull_reference": "yutu0814/javac-case-092-jep@sha256:da9c9293093a89f2cfd0e2d584077080c640f0c002cef0589c64e28ac6b550d4"
+        "image_id": "sha256:72952f1181932c9fe2232b8318bd23eca7c192a88b01749145909d9d795d9213",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-092@sha256:72952f1181932c9fe2232b8318bd23eca7c192a88b01749145909d9d795d9213"
       },
       "files": [
         {
@@ -2612,7 +2612,7 @@
         },
         {
           "path": "cases/javac_case_092/evaluator/case_config.json",
-          "sha256": "5cdd669def3f24006391c7390328d4eb1925b4b3118bc97efc4cb44b63c54054"
+          "sha256": "f16b1261556966a6347c46d997ecf4b0b5542fd620cdb24b3c3b7903b6d6599b"
         },
         {
           "path": "cases/javac_case_092/evaluator/evaluate_model_patch.py",
