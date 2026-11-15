@@ -2216,14 +2216,14 @@
       "cohort": "java_author11",
       "base_commit": "f40cd981a1ff81e3da603059a062728ee33ddf02",
       "image": {
-        "image_id": "sha256:4c7f04fc70f21a42683dff8794b39b0fdcc2d4e67e6d9d8a58362c89fe72a36f",
-        "pull_reference": "yutu0814/javac-case-075-lwjgl3@sha256:4c7f04fc70f21a42683dff8794b39b0fdcc2d4e67e6d9d8a58362c89fe72a36f",
+        "image_id": "sha256:bab94a09875465ffbfb542746dfbc2c29205057939b1e1eb2a36fd0b86925984",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-075@sha256:bab94a09875465ffbfb542746dfbc2c29205057939b1e1eb2a36fd0b86925984",
         "historical_image_id": "sha256:57f4a87865ffa18071bfc3ecb26619c4a7ee79309d58c745d8a786a514c3d56e"
       },
       "files": [
         {
           "path": "cases/javac_case_075/evaluator/build_project.py",
-          "sha256": "a0b15a9ec867359c66b860c5ca53072b6d7d7ece413d0837e5ca891c5037214d"
+          "sha256": "71b9ed416016acd0dca06a56135acf5aa967b0a2bb06acffad1d462c01e9ced8"
         },
         {
           "path": "cases/javac_case_075/evaluator/case_adapter.sh",
@@ -2231,7 +2231,7 @@
         },
         {
           "path": "cases/javac_case_075/evaluator/case_config.json",
-          "sha256": "a2a6dfdd3b08216412628d28e9930f4cbe6e42843f408a2ac1dec45904fcd43a"
+          "sha256": "9e74123e020ca7d07510969bd611146ce18faf100a405f5ebb4c04e9b627320e"
         },
         {
           "path": "cases/javac_case_075/evaluator/evaluate_model_patch.py",

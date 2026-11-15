@@ -932,8 +932,8 @@
       "cohort": "java_author11",
       "base_commit": "f40cd981a1ff81e3da603059a062728ee33ddf02",
       "image": {
-        "image_id": "sha256:4c7f04fc70f21a42683dff8794b39b0fdcc2d4e67e6d9d8a58362c89fe72a36f",
-        "pull_reference": "yutu0814/javac-case-075-lwjgl3@sha256:4c7f04fc70f21a42683dff8794b39b0fdcc2d4e67e6d9d8a58362c89fe72a36f",
+        "image_id": "sha256:bab94a09875465ffbfb542746dfbc2c29205057939b1e1eb2a36fd0b86925984",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-075@sha256:bab94a09875465ffbfb542746dfbc2c29205057939b1e1eb2a36fd0b86925984",
         "historical_image_id": "sha256:57f4a87865ffa18071bfc3ecb26619c4a7ee79309d58c745d8a786a514c3d56e"
       },
       "generation_python": "discover_image_default",

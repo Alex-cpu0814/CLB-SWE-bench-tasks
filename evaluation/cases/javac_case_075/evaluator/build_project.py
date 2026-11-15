@@ -15,7 +15,7 @@ manifest = json.loads(Path("/benchmark/upstream_tests.json").read_text())
 for relative, digest in manifest["source_sha256"].items():
     if hashlib.sha256((repo / relative).read_bytes()).hexdigest() != digest:
         raise SystemExit("Protected upstream test changed: " + relative)
-deps = Path("/benchmark/dependencies")
+deps = Path("/opt/clb-deps")
 libs = repo / "libs"
 libs.mkdir(exist_ok=True)
 for name in ("jcommander.jar", "testng.jar"):
