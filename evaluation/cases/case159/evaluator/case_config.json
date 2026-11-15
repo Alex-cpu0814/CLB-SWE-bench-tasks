@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/astrofrog/fast-histogram.git",
   "base_commit": "085efdad6570e25440beab781ef70e1f81605c12",
   "fix_commit": "82f140be8f098e00e4eef35e8f6582c8b7067fba",
-  "image": "yutu0814/pyc-case-159-fast-histogram:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-159@sha256:6fbd36c532784c0171e4fedf668e9bf95a1d2b942a4fd1ffeefea48887c0c0ac",
   "python_version": "3.6",
   "numpy_version": "1.15.4",
   "extra_apt_packages": [],

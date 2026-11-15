@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/ultrajson/ultrajson.git",
   "base_commit": "f26f9679f1b9d7fa2d0488e1e7b1256d9391a85f",
   "fix_commit": "a920bfa9d85bcd78836b866d1be80c1e3dcca1da",
-  "image": "yutu0814/pyc-case-071-ultrajson:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-071@sha256:1360b4e409af17a90319f15a59f1d3af12cc75c5c0aade43f712b4d06eeb6587",
   "python_version": "3.8",
   "numpy_version": "not required",
   "extra_apt_packages": [],
