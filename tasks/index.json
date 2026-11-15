@@ -796,8 +796,8 @@
       "cohort": "python50",
       "base_commit": "9458171a2eb9bea9036632a408da7b269ea07bbb",
       "image": {
-        "image_id": "sha256:370afac41f58090a6e2e5b252836e1f5aedc8a31127910c403ce5782eb0c89a1",
-        "pull_reference": "yutu0814/pyc-case-174-spglib@sha256:370afac41f58090a6e2e5b252836e1f5aedc8a31127910c403ce5782eb0c89a1"
+        "image_id": "sha256:494bc87195b7935e77944f1fa9eef0bbbdfb144de503843d2c32129de6ce5b9f",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-python-c-174@sha256:494bc87195b7935e77944f1fa9eef0bbbdfb144de503843d2c32129de6ce5b9f"
       },
       "generation_python": "python",
       "task": {
@@ -813,8 +813,8 @@
       "cohort": "python50",
       "base_commit": "4afa84322f83b368dada7e3c6f64c3a17114aaa0",
       "image": {
-        "image_id": "sha256:06d09d8c8172c328860448ed7055be235f954a2331396cb29766080771363983",
-        "pull_reference": "yutu0814/pyc-case-175-spglib@sha256:06d09d8c8172c328860448ed7055be235f954a2331396cb29766080771363983"
+        "image_id": "sha256:8a231176911a5ff8c91266144f378803bdeb62b8c416f8a14a70be06414dccec",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-python-c-175@sha256:8a231176911a5ff8c91266144f378803bdeb62b8c416f8a14a70be06414dccec"
       },
       "generation_python": "python",
       "task": {
@@ -830,8 +830,8 @@
       "cohort": "python50",
       "base_commit": "20cdbb714300bdb2502d9ac44740c85c64cce691",
       "image": {
-        "image_id": "sha256:b71d6af3399f5af04eeda403e5f39f855e644d8e8574e9b7279a0d3e71dcd221",
-        "pull_reference": "yutu0814/pyc-case-176-jpy@sha256:b71d6af3399f5af04eeda403e5f39f855e644d8e8574e9b7279a0d3e71dcd221"
+        "image_id": "sha256:95b67ff2d01223c8ae4f71b126ba562c78ebd4845b60c04d018a3f02f6e70c76",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-python-c-176@sha256:95b67ff2d01223c8ae4f71b126ba562c78ebd4845b60c04d018a3f02f6e70c76"
       },
       "generation_python": "python2.7",
       "task": {
@@ -1121,8 +1121,8 @@
       "cohort": "java_upstream11",
       "base_commit": "7578a2470871e12dd72716925f60d857ad7eb409",
       "image": {
-        "image_id": "sha256:1e6da170e3dc03c5245f2c4ce3a47c2b4e200615df73876ed17a2ffa015d5a35",
-        "pull_reference": "yutu0814/javac-case-150-junixsocket@sha256:1e6da170e3dc03c5245f2c4ce3a47c2b4e200615df73876ed17a2ffa015d5a35"
+        "image_id": "sha256:7c4817edef5ef14ff111efa9684173c9f14a5e4c13fc7472bb13ff9578f3abed",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-150@sha256:7c4817edef5ef14ff111efa9684173c9f14a5e4c13fc7472bb13ff9578f3abed"
       },
       "generation_python": "discover_image_default",
       "task": {

@@ -1848,8 +1848,8 @@
       "cohort": "python50",
       "base_commit": "9458171a2eb9bea9036632a408da7b269ea07bbb",
       "image": {
-        "image_id": "sha256:370afac41f58090a6e2e5b252836e1f5aedc8a31127910c403ce5782eb0c89a1",
-        "pull_reference": "yutu0814/pyc-case-174-spglib@sha256:370afac41f58090a6e2e5b252836e1f5aedc8a31127910c403ce5782eb0c89a1"
+        "image_id": "sha256:494bc87195b7935e77944f1fa9eef0bbbdfb144de503843d2c32129de6ce5b9f",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-python-c-174@sha256:494bc87195b7935e77944f1fa9eef0bbbdfb144de503843d2c32129de6ce5b9f"
       },
       "files": [
         {
@@ -1858,7 +1858,7 @@
         },
         {
           "path": "cases/case174/evaluator/case_config.json",
-          "sha256": "101adc5408fb51bb216320481af365643f1940d68daafdaa0553edd2f61997a0"
+          "sha256": "fdba0b1893be3bc71b486381161186be228eb2e488755b6ee57364e4dd73e845"
         },
         {
           "path": "cases/case174/evaluator/evaluate_model_patch.py",
@@ -1893,8 +1893,8 @@
       "cohort": "python50",
       "base_commit": "4afa84322f83b368dada7e3c6f64c3a17114aaa0",
       "image": {
-        "image_id": "sha256:06d09d8c8172c328860448ed7055be235f954a2331396cb29766080771363983",
-        "pull_reference": "yutu0814/pyc-case-175-spglib@sha256:06d09d8c8172c328860448ed7055be235f954a2331396cb29766080771363983"
+        "image_id": "sha256:8a231176911a5ff8c91266144f378803bdeb62b8c416f8a14a70be06414dccec",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-python-c-175@sha256:8a231176911a5ff8c91266144f378803bdeb62b8c416f8a14a70be06414dccec"
       },
       "files": [
         {
@@ -1903,7 +1903,7 @@
         },
         {
           "path": "cases/case175/evaluator/case_config.json",
-          "sha256": "c2802030d0c074fcd02c9467bbe03b735645f9864aa499a7f24ba9a57c364bbe"
+          "sha256": "1b1e03f945facfad0e5d2fbc4dd2298597422e6c12d0a195851e8c481f5b2e68"
         },
         {
           "path": "cases/case175/evaluator/evaluate_model_patch.py",
@@ -1938,8 +1938,8 @@
       "cohort": "python50",
       "base_commit": "20cdbb714300bdb2502d9ac44740c85c64cce691",
       "image": {
-        "image_id": "sha256:b71d6af3399f5af04eeda403e5f39f855e644d8e8574e9b7279a0d3e71dcd221",
-        "pull_reference": "yutu0814/pyc-case-176-jpy@sha256:b71d6af3399f5af04eeda403e5f39f855e644d8e8574e9b7279a0d3e71dcd221"
+        "image_id": "sha256:95b67ff2d01223c8ae4f71b126ba562c78ebd4845b60c04d018a3f02f6e70c76",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-python-c-176@sha256:95b67ff2d01223c8ae4f71b126ba562c78ebd4845b60c04d018a3f02f6e70c76"
       },
       "files": [
         {
@@ -1948,7 +1948,7 @@
         },
         {
           "path": "cases/case176/evaluator/case_config.json",
-          "sha256": "ad571c31061e3eec19274a054dd5cbb5affff0c3b989140ac1b7574d2ec20ec0"
+          "sha256": "d6f54e642bd85950e9d6be47aa002fb09a3b3e7195fadd32be9fd5cd07c40479"
         },
         {
           "path": "cases/case176/evaluator/evaluate_model_patch.py",
@@ -2733,8 +2733,8 @@
       "cohort": "java_upstream11",
       "base_commit": "7578a2470871e12dd72716925f60d857ad7eb409",
       "image": {
-        "image_id": "sha256:1e6da170e3dc03c5245f2c4ce3a47c2b4e200615df73876ed17a2ffa015d5a35",
-        "pull_reference": "yutu0814/javac-case-150-junixsocket@sha256:1e6da170e3dc03c5245f2c4ce3a47c2b4e200615df73876ed17a2ffa015d5a35"
+        "image_id": "sha256:7c4817edef5ef14ff111efa9684173c9f14a5e4c13fc7472bb13ff9578f3abed",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-150@sha256:7c4817edef5ef14ff111efa9684173c9f14a5e4c13fc7472bb13ff9578f3abed"
       },
       "files": [
         {
@@ -2743,7 +2743,7 @@
         },
         {
           "path": "cases/javac_case_150/evaluator/case_config.json",
-          "sha256": "05966b896acd7cd0bbe3b1afefab59120b0e110710772bd0570b69b2ec1e6cac"
+          "sha256": "815831ca107457f48d6115255be95e1ec6e51b4d74e1af5250e219f395b006e9"
         },
         {
           "path": "cases/javac_case_150/evaluator/evaluate_model_patch.py",

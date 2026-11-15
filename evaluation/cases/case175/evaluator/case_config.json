@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/spglib/spglib.git",
   "base_commit": "4afa84322f83b368dada7e3c6f64c3a17114aaa0",
   "fix_commit": "c571f29d57d51ed5d8efa1eb78e42e7f48082897",
-  "image": "yutu0814/pyc-case-175-spglib:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-python-c-175@sha256:8a231176911a5ff8c91266144f378803bdeb62b8c416f8a14a70be06414dccec",
   "python_version": "3.8",
   "extra_apt_packages": [],
   "runtime_assets": [

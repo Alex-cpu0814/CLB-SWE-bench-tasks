@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/kohlschutter/junixsocket.git",
   "base_commit": "7578a2470871e12dd72716925f60d857ad7eb409",
   "fix_commit": "f8f280c8b27c47b17d627eb0efd2e33317d4b46d",
-  "image": "yutu0814/javac-case-150-junixsocket:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-java-c-150@sha256:7c4817edef5ef14ff111efa9684173c9f14a5e4c13fc7472bb13ff9578f3abed",
   "python_version": "3.12",
   "python_sha256": "system-package",
   "extra_apt_packages": ["build-essential", "clang", "git", "python3"],
