@@ -2364,8 +2364,8 @@
       "cohort": "java_author11",
       "base_commit": "e4f13ea277ce4809688dde766cc9fd173ec6f63d",
       "image": {
-        "image_id": "sha256:8377bd71afd8d7673a7effb4473bbf204e57a1cad7c41fcc54caa11d3c7c1657",
-        "pull_reference": "yutu0814/javac-case-097-jep@sha256:8377bd71afd8d7673a7effb4473bbf204e57a1cad7c41fcc54caa11d3c7c1657"
+        "image_id": "sha256:c7c49ac969885f0a4d0e198b07d853bb3cc6f6c370bbeebca3fdcee72e50ee77",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-097@sha256:c7c49ac969885f0a4d0e198b07d853bb3cc6f6c370bbeebca3fdcee72e50ee77"
       },
       "files": [
         {
@@ -2374,7 +2374,7 @@
         },
         {
           "path": "cases/javac_case_097/evaluator/case_config.json",
-          "sha256": "c067ddcd2ffca9ccb7baa1c970ce10e2593ce851ce78ee3ecfed4804f37f7750"
+          "sha256": "8931e311d5b8871e200f24ed9159e5e4b253fecef47b11ecd3bed4506be3fa95"
         },
         {
           "path": "cases/javac_case_097/evaluator/evaluate_model_patch.py",
@@ -2409,8 +2409,8 @@
       "cohort": "java_author11",
       "base_commit": "b1ab138dd6d492c7547e24d0b117aeafb112613d",
       "image": {
-        "image_id": "sha256:502cb2beb42e3c90413016c2d2ab33dc53fec30912f04ef8eadd47caeae629ee",
-        "pull_reference": "yutu0814/javac-case-099-jep@sha256:502cb2beb42e3c90413016c2d2ab33dc53fec30912f04ef8eadd47caeae629ee"
+        "image_id": "sha256:510cefa76cbef6fdb8e11b4f0f2533c109e92c96bffb6733b1c50ffdd1490d93",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-099@sha256:510cefa76cbef6fdb8e11b4f0f2533c109e92c96bffb6733b1c50ffdd1490d93"
       },
       "files": [
         {
@@ -2419,7 +2419,7 @@
         },
         {
           "path": "cases/javac_case_099/evaluator/case_config.json",
-          "sha256": "827d1e8371ebab822cf013d33d6dd5e4baecdc6b8b622d1beb3bcb16f2863310"
+          "sha256": "e0226186a2ddebd255094c83114c4752ec11818a291eb7f67d43ccf77149d048"
         },
         {
           "path": "cases/javac_case_099/evaluator/evaluate_model_patch.py",

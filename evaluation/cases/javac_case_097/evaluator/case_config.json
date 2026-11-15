@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/ninia/jep.git",
   "base_commit": "e4f13ea277ce4809688dde766cc9fd173ec6f63d",
   "fix_commit": "767509de81f3a11b1ca54e23619d3226944a141e",
-  "image": "yutu0814/javac-case-097-jep@sha256:8377bd71afd8d7673a7effb4473bbf204e57a1cad7c41fcc54caa11d3c7c1657",
+  "image": "yutu0814/clb.eval.x86_64.clb-java-c-097@sha256:c7c49ac969885f0a4d0e198b07d853bb3cc6f6c370bbeebca3fdcee72e50ee77",
   "python_version": "3.4.10",
   "python_sha256": "217757699249ab432571b381386d441e12b433100ab5f908051fcb7cced2539d",
   "extra_apt_packages": [],
