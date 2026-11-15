@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/LWJGL/lwjgl3.git",
   "base_commit": "427e278dc2402aca025cacd58a80eb4eaa8c4832",
   "fix_commit": "94f8bd69e176be3e48b4376281fed778e76ab8df",
-  "image": "javac-case-069-lwjgl3:benchmark-v1",
+  "image": "yutu0814/clb.eval.x86_64.clb-java-c-069@sha256:4c3e81308492f51476d57f3b6d5ada60fd184926c43d2bf9610e3978f42a730e",
   "python_version": "3.10",
   "python_sha256": "unused",
   "extra_apt_packages": ["ant", "gcc", "g++", "make", "file", "unzip", "xz-utils"],
