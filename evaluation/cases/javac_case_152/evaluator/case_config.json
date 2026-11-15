@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/kohlschutter/junixsocket.git",
   "base_commit": "4f7667c4655712fc7371c0dbab0de5bf785e5d3d",
   "fix_commit": "2f8f096b84fba1ae26058d41cc03df47719379df",
-  "image": "yutu0814/clb.eval.x86_64.kohlschutter_1776_junixsocket-97@sha256:5962f393b2102bb2455cfd24dfcd510cfa97a1ec605644d59164651f63c4a390",
+  "image": "yutu0814/clb.eval.x86_64.clb-java-c-152@sha256:7c17382b5b88d9de614df35143fa0b97c0101611079574f0999b848d3ef1fda8",
   "python_version": "3.12",
   "python_sha256": "system-package",
   "extra_apt_packages": [

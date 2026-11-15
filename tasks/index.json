@@ -864,8 +864,8 @@
       "cohort": "java_author11",
       "base_commit": "307ebed6ef6ba420b2165ddb2ec21dd9a37479df",
       "image": {
-        "image_id": "sha256:866ae42ecde1bbcaa0581fabe2380bdea159ed944f565066b7abe1c2922a7669",
-        "pull_reference": "yutu0814/javac-case-056-lwjgl3@sha256:866ae42ecde1bbcaa0581fabe2380bdea159ed944f565066b7abe1c2922a7669"
+        "image_id": "sha256:a7ee299d9b4d862e8f46b6d64f2775ea0da62fc984dcafe2ee0743d105ff211b",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-056@sha256:a7ee299d9b4d862e8f46b6d64f2775ea0da62fc984dcafe2ee0743d105ff211b"
       },
       "generation_python": "discover_image_default",
       "task": {
@@ -950,8 +950,8 @@
       "cohort": "java_author11",
       "base_commit": "9eeb14c4c8b2d0e49feece90a6e330826b49c7dd",
       "image": {
-        "image_id": "sha256:acc01f758d28a94ab99d3e35eeaee06bd65f9a119daf4b2522e469c6994e3942",
-        "pull_reference": "yutu0814/javac-case-093-jep@sha256:acc01f758d28a94ab99d3e35eeaee06bd65f9a119daf4b2522e469c6994e3942"
+        "image_id": "sha256:4ac5cee19d541869db19dc060db7ea23928c001afff67ef8655bca0ba7607015",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-093@sha256:4ac5cee19d541869db19dc060db7ea23928c001afff67ef8655bca0ba7607015"
       },
       "generation_python": "discover_image_default",
       "task": {
@@ -1138,8 +1138,8 @@
       "cohort": "java_upstream11",
       "base_commit": "4f7667c4655712fc7371c0dbab0de5bf785e5d3d",
       "image": {
-        "image_id": "sha256:5962f393b2102bb2455cfd24dfcd510cfa97a1ec605644d59164651f63c4a390",
-        "pull_reference": "yutu0814/clb.eval.x86_64.kohlschutter_1776_junixsocket-97@sha256:5962f393b2102bb2455cfd24dfcd510cfa97a1ec605644d59164651f63c4a390"
+        "image_id": "sha256:7c17382b5b88d9de614df35143fa0b97c0101611079574f0999b848d3ef1fda8",
+        "pull_reference": "yutu0814/clb.eval.x86_64.clb-java-c-152@sha256:7c17382b5b88d9de614df35143fa0b97c0101611079574f0999b848d3ef1fda8"
       },
       "generation_python": "discover_image_default",
       "task": {

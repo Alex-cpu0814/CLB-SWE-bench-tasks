@@ -1,0 +1,378 @@
+FROM public.ecr.aws/docker/library/maven:3.9.9-eclipse-temurin-17-focal@sha256:45ddc84a2e7f75ab7faf290085a0292dd8adc5e7674a89231f6a879b60f4358d
+
+ARG REPO_URL=https://github.com/kohlschutter/junixsocket.git
+ARG BASE_COMMIT=4f7667c4655712fc7371c0dbab0de5bf785e5d3d
+ARG INSTANCE_ID=clb-javac-152
+ENV DEBIAN_FRONTEND=noninteractive LANG=C.UTF-8 LC_ALL=C.UTF-8
+
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g; s|http://security.ubuntu.com/ubuntu|https://security.ubuntu.com/ubuntu|g' /etc/apt/sources.list \
+    && apt-get -o Acquire::Retries=4 update \
+    && apt-get install -y --no-install-recommends \
+       build-essential clang git python3 python-is-python3 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+LABEL benchmark.instance_id="${INSTANCE_ID}" \
+      benchmark.base_commit="${BASE_COMMIT}" \
+      org.opencontainers.image.source="https://github.com/kohlschutter/junixsocket"
+
+RUN git init /testbed \
+    && cd /testbed \
+    && git remote add origin "${REPO_URL}" \
+    && git fetch --depth=1 --no-tags origin "${BASE_COMMIT}" \
+    && git checkout --detach FETCH_HEAD \
+    && git remote remove origin \
+    && git config core.autocrlf false \
+    && git for-each-ref --format='delete %(refname)' refs/remotes refs/tags | git update-ref --stdin \
+    && git reflog expire --expire=now --all \
+    && git gc --prune=now \
+    && test "$(git rev-parse HEAD)" = "${BASE_COMMIT}"
+
+# Warm Base dependencies separately. Evaluations rebuild every project artifact
+# from the candidate source while Docker networking is disabled.
+RUN cd /testbed \
+    && mvn -B -Prelease-native \
+       -pl junixsocket-native-common,junixsocket-native-custom -am clean install \
+       -Dmaven.test.skip=true \
+       -Djunixsocket.custom.arch=amd64-Linux-clang-jni \
+       -Djunixsocket.custom.shaded=default \
+    && mvn -B -f junixsocket-common/pom.xml package -Dmaven.test.skip=true \
+    && rm -rf /root/.m2/repository/com/kohlschutter/junixsocket \
+    && git clean -fdx \
+    && test -z "$(git status --porcelain)" \
+    && mkdir -p /benchmark /inputs /results
+
+WORKDIR /testbed
+CMD ["/bin/bash"]
+
+# Public Maven Central artifacts needed by offline grading.
+RUN python3 - <<'PY'
+from concurrent.futures import ThreadPoolExecutor
+from hashlib import sha256
+from pathlib import Path
+from urllib.request import urlopen
+
+repository = Path('/root/.m2/repository')
+artifacts = [
+    ('com/github/hazendaz/base-parent/31/base-parent-31.pom', 'a026feacfb14dcd656a54d863f50e698c75ba01c92a5b5159ac106edfe267cdc', 90244),
+    ('com/github/spotbugs/spotbugs-annotations/4.7.0/spotbugs-annotations-4.7.0.jar', '8e6677102aa0de50841644cf9a57d6d503550ad774049a76c75bf157a8beebd5', 15203),
+    ('com/github/spotbugs/spotbugs-annotations/4.7.0/spotbugs-annotations-4.7.0.pom', 'e03bd14c0964ad6293547bf50949389254d10146a6c0f5ff16d51adc842a7f11', 3459),
+    ('com/github/spotbugs/spotbugs-maven-plugin/4.6.0.0/spotbugs-maven-plugin-4.6.0.0.jar', '0781b6953d30543a3d19dec33c0c1f018d9379948315dd581efa21c7cffbb41d', 151740),
+    ('com/github/spotbugs/spotbugs-maven-plugin/4.6.0.0/spotbugs-maven-plugin-4.6.0.0.pom', '1395b1d4e22ac9906b00bbe536bbf05262530f4bc3caaab5b4f38ca03c05d084', 32135),
+    ('com/github/spotbugs/spotbugs/4.7.0/spotbugs-4.7.0.jar', '94c44d86c83b8fe63b20023e510874aef721b1081982051706e1da841572f295', 3542711),
+    ('com/github/spotbugs/spotbugs/4.7.0/spotbugs-4.7.0.pom', 'b047c5439242c83272ce3977b85565228eec84ac162b230e5bcbd92673c6ac0b', 6673),
+    ('com/google/code/gson/gson-parent/2.9.0/gson-parent-2.9.0.pom', 'af781c9a5766ffea311a0df0536576a64decc661aa110c4de5c73ac8bf434424', 4515),
+    ('com/google/code/gson/gson/2.9.0/gson-2.9.0.jar', 'c96d60551331a196dac54b745aa642cd078ef89b6f267146b705f2c2cbef052d', 249277),
+    ('com/google/code/gson/gson/2.9.0/gson-2.9.0.pom', '7190d0b07f278e9f4c603f44e543940f81cf1a2559f851c6f298c9bb2be2978c', 8065),
+    ('com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar', '721cb91842b46fa056847d104d5225c8b8e1e8b62263b993051e1e5a0137b7ec', 15979),
+    ('com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.pom', '0261ca01f2d2e9ac2ae2ece75d42c56323b385fb294b6bc943f62ef4e92ddf08', 2163),
+    ('com/google/errorprone/error_prone_parent/2.11.0/error_prone_parent-2.11.0.pom', '8283f0cb44c624a79d330b6fd80b8b8a715a68b3685c9a951c3de837d4540551', 10734),
+    ('com/google/guava/guava-parent/16.0.1/guava-parent-16.0.1.pom', '2c98892cbf7c606b91b4f0f0d1d91da26746bbf5f8595626f5b4d6a5a1914824', 7336),
+    ('com/google/guava/guava-parent/31.1-jre/guava-parent-31.1-jre.pom', '4439626783b44ad25ef05ff07621dd4bb796cc4eb4f2966a4a461fea4130e0fc', 14736),
+    ('com/google/guava/guava/16.0.1/guava-16.0.1.jar', 'a896857d07845d38c7dc5bbc0457b6d9b0f62ecffda010e5e9ec12d561f676d3', 2228009),
+    ('com/google/guava/guava/16.0.1/guava-16.0.1.pom', 'c676575845fc8ad6dcfeca0827f405066a140f5fa5434715598179c8ba1c0817', 6102),
+    ('com/google/guava/guava/31.1-jre/guava-31.1-jre.jar', 'a42edc9cab792e39fe39bb94f3fca655ed157ff87a8af78e1d6ba5b07c4a00ab', 2959479),
+    ('com/google/guava/guava/31.1-jre/guava-31.1-jre.pom', '9193d07bf4f660108d7358e58b27d21b44e34e80d6734e98e21916376f270de2', 10981),
+    ('com/kohlschutter/coding-style/1.2.7/coding-style-1.2.7-files.zip', 'd90da4dd2020fc56275603e55c2d37d24646ff3b979b9dee605ddfd06c49dad8', 28668),
+    ('com/kohlschutter/coding-style/1.2.7/coding-style-1.2.7.pom', 'ec26d61739649b7a8e0f1609c58e9288a516019072da5046e3e5844875d7b9ed', 2703),
+    ('com/kohlschutter/compiler-annotations/1.4.4/compiler-annotations-1.4.4.jar', '29b66804ff7fe33e4a2774de0d5432e67a1ef31bf48e0ac09d1364e2fc6f6b76', 5614),
+    ('com/kohlschutter/compiler-annotations/1.4.4/compiler-annotations-1.4.4.pom', 'a49f7c092239340172b871e243e1b861052aec1cef8bcf5ebc33ef55e1048780', 1129),
+    ('com/kohlschutter/kohlschutter-parent-multirelease/1.4.4/kohlschutter-parent-multirelease-1.4.4.pom', '4b3bba1e07057676659dfa8b626f5ce2c8257fd2f0e193ec4420dcf6667d1d40', 9528),
+    ('com/kohlschutter/kohlschutter-parent/1.4.4/kohlschutter-parent-1.4.4.pom', '0b48ad0deb5138bfe27de8275bf4de3a5bc7321e9571984e94b5bf6505fa91de', 47219),
+    ('com/kohlschutter/kohlschutter-test-util/1.4.4/kohlschutter-test-util-1.4.4.jar', '8ffd0e01305be6eaac52cb572f08529b35bb56c7b98aafa01142b6146cfa2b81', 50067),
+    ('com/kohlschutter/kohlschutter-test-util/1.4.4/kohlschutter-test-util-1.4.4.pom', '1d9802b5f239e26450ad760e0d559208b3a97a210d2dd8549ff57eea823e2b74', 1237),
+    ('com/kohlschutter/kohlschutter-util/1.4.4/kohlschutter-util-1.4.4.jar', 'e9290edff08ca258df3f5711e62684e3cf6eaa30e5903403ebcaeb54f6e3862f', 24389),
+    ('com/kohlschutter/kohlschutter-util/1.4.4/kohlschutter-util-1.4.4.pom', '9650cc0a7c09aece5d893f12ae9aa81b6872d2b03e77967343782d9499d10506', 1352),
+    ('com/mycila/license-maven-plugin-parent/4.2.rc3/license-maven-plugin-parent-4.2.rc3.pom', 'bc04a77bec0700db76e9f4e0d11cafb4964782f7f0092f8bbaa6851361335069', 16716),
+    ('com/mycila/license-maven-plugin/4.2.rc3/license-maven-plugin-4.2.rc3.jar', '55b9a8baa85d2026c8ae21f82d70f034fba6a211a2b6777ccf3bae62fe5c8821', 140849),
+    ('com/mycila/license-maven-plugin/4.2.rc3/license-maven-plugin-4.2.rc3.pom', '6b2f681525931d14815425d6d270bd3ff422d60e93848c812ad4d5634abcbbcd', 7972),
+    ('com/mycila/mycila-pom/10/mycila-pom-10.pom', '4611d601fa9dcccff810a10483e594bf6c9c5a7d04e2bc8d21af8dff6d291095', 15348),
+    ('com/puppycrawl/tools/checkstyle/10.1/checkstyle-10.1.jar', '8decaaf3a9f149da8ddb3bedbd01850249c14b1df57c0d1e29027791fc7bb26f', 2009131),
+    ('com/puppycrawl/tools/checkstyle/10.1/checkstyle-10.1.pom', 'dfaa44d34fd46cfd591bbb2dca48913d1885b218dee09123c7277cacd64d985b', 144113),
+    ('com/thoughtworks/qdox/qdox/2.0.1/qdox-2.0.1.jar', 'c28db4602da9f3817a59de9be137c1f6083a9cb95fa1781f54eda75763a95c67', 333756),
+    ('com/thoughtworks/qdox/qdox/2.0.1/qdox-2.0.1.pom', 'c605716f2d06beade0b3c20bc9ea1cd20db2fc5c040a461b4dfa15866246e919', 16016),
+    ('commons-logging/commons-logging/1.1/commons-logging-1.1.jar', '9e8d01f172301b966f1f404aa6fc0bdbec478ae9197256ad95bfcad1ef927601', 52915),
+    ('de/thetaphi/forbiddenapis/3.3/forbiddenapis-3.3.jar', 'a8dd72e1f4505871104c3797bc2cfba716735332dc3248e7316072b642894b9f', 384303),
+    ('de/thetaphi/forbiddenapis/3.3/forbiddenapis-3.3.pom', '804dae90a5d4be3869e1595199b2ac505e6a1da4295314a044cee8aa3eaca7d3', 2865),
+    ('info/picocli/picocli/4.6.3/picocli-4.6.3.jar', 'b0a5159e926de8084ff066025142270443533656bc599b8bb31d14d11fd138a4', 405953),
+    ('info/picocli/picocli/4.6.3/picocli-4.6.3.pom', '24150c7dbdc8a5bb987cbeb4898ee1515d2893d3f6224acfc563da1a7fd5c283', 1375),
+    ('javax/enterprise/cdi-api/1.2/cdi-api-1.2.pom', 'd7d713c993363764ba1667296b835ee914e19b2e70921eafe96b37f0d5b4088f', 6276),
+    ('junit/junit/4.13.2/junit-4.13.2.jar', '8e495b634469d64fb8acfa3495a065cbacc8a0fff55ce1e31007be4c16dc57d3', 384581),
+    ('junit/junit/4.13.2/junit-4.13.2.pom', '569b6977ee4603c965c1c46c3058fa6e969291b0160eb6964dd092cd89eadd94', 27018),
+    ('net/sf/saxon/Saxon-HE/11.3/Saxon-HE-11.3.jar', 'e62e1a283b1aa610605fde18e9368a9ec6f24d878320eb74cfc1c1f2d432e8a6', 5111311),
+    ('net/sf/saxon/Saxon-HE/11.3/Saxon-HE-11.3.pom', '6bba2e2a5d234f090b6134603253bb8e41d2dff65ec2f6216837348c27c29fcf', 4209),
+    ('net/sourceforge/pmd/pmd-core/6.45.0/pmd-core-6.45.0.jar', 'e9ab0972c782beea12fec7d2461b7f2bdc09a30b51c6a19d21a4e45ceab72252', 1361846),
+    ('net/sourceforge/pmd/pmd-core/6.45.0/pmd-core-6.45.0.pom', 'd253aec82ef09021c44853e047e0f4b90c3daf5d2e21272baf2883a0ea522dc1', 8803),
+    ('net/sourceforge/pmd/pmd-java/6.45.0/pmd-java-6.45.0.jar', '75d566c75db49fac91735ca68d1de417914813d4c21297f7002de5df2b77dbc5', 1186943),
+    ('net/sourceforge/pmd/pmd-java/6.45.0/pmd-java-6.45.0.pom', 'babe0e383dc20c33289f63831c9ccbea0f699d23c78f45df99d50b78d34084e3', 8927),
+    ('net/sourceforge/pmd/pmd-javascript/6.45.0/pmd-javascript-6.45.0.jar', 'c0f4cad70d3d56eee8255e783c7bd21fea558f0277f57700758e23f0a55c8996', 144712),
+    ('net/sourceforge/pmd/pmd-javascript/6.45.0/pmd-javascript-6.45.0.pom', 'cad50bd9b880fc62e2a9d4e1494bade312b975b773e1aeffa03245dfbb108034', 4043),
+    ('net/sourceforge/pmd/pmd-jsp/6.45.0/pmd-jsp-6.45.0.jar', '41029e3fea7d423cb0f3100c6b6f7b77ae150ec21caa627052cd1ee95b4c2d75', 100820),
+    ('net/sourceforge/pmd/pmd-jsp/6.45.0/pmd-jsp-6.45.0.pom', '18e8a49e3b71fdaa0f80b817dcce9944f6e7cc5ee0a5c1beac3e5f855d43d03a', 3698),
+    ('net/sourceforge/pmd/pmd/6.45.0/pmd-6.45.0.pom', '9cc01179e0f8038fde74cb2c6c248f0904462ec8dda1e7c71d172723e578a3cc', 47925),
+    ('org/apache/apache/25/apache-25.pom', 'e68fc19a48cec582a6732fd0b10dbfe9feca25060963def89e547f8a3759d379', 20539),
+    ('org/apache/commons/commons-compress/1.21/commons-compress-1.21.pom', '675bb023c9beedde3232949979b9742a5fea946280a55a1b462d4ca7801088cd', 19684),
+    ('org/apache/commons/commons-text/1.3/commons-text-1.3.jar', '8185b3a5311092d83ed1f184c2d093b3105d726bbd76867c32b3511542bb99a8', 182954),
+    ('org/apache/groovy/groovy-ant/4.0.1/groovy-ant-4.0.1.jar', 'b4498e90eb7b4322b7ae4f6bae230a9cf7c730ebae73c84dc3a3577e2593129a', 76120),
+    ('org/apache/groovy/groovy-ant/4.0.1/groovy-ant-4.0.1.pom', 'cc4819752613c600b5350b244166575c39eb21b2f9500b104dd4e697d5f19b83', 23961),
+    ('org/apache/groovy/groovy-bom/4.0.1/groovy-bom-4.0.1.pom', '89b4532b2e80365418667f65b6f34b2590be6daef5dbd309d59fed3293fa2c7d', 27245),
+    ('org/apache/groovy/groovy-dateutil/4.0.1/groovy-dateutil-4.0.1.jar', '703b54187b7227ce51830a07b78e717f9ae270e4bd3952e5d68c40e921d1501e', 11730),
+    ('org/apache/groovy/groovy-dateutil/4.0.1/groovy-dateutil-4.0.1.pom', 'f6205d233bb39d6ab7af5ea166ad217617445da89e6a59d68adacbd31552eb53', 22571),
+    ('org/apache/groovy/groovy-docgenerator/4.0.1/groovy-docgenerator-4.0.1.jar', '3db9c9ee90202e33af09b4c66c3a6010b1f943f4e214b0bd7d71a3cdb376d7f0', 127958),
+    ('org/apache/groovy/groovy-docgenerator/4.0.1/groovy-docgenerator-4.0.1.pom', 'ad337cdf493c14da72897adcd964883fb5570c195d52ae53f0de33fa411d3106', 22952),
+    ('org/apache/groovy/groovy-groovydoc/4.0.1/groovy-groovydoc-4.0.1.jar', '901bd8a6719a81eecbb333a113f5f19a68e74f690a83ac0bb135a76c0da5116c', 148875),
+    ('org/apache/groovy/groovy-groovydoc/4.0.1/groovy-groovydoc-4.0.1.pom', 'b05d2fb3e31c60d9e2a5d527bf13216007ca5adf62590f491f6168fac9fd08c0', 23155),
+    ('org/apache/groovy/groovy-json/4.0.1/groovy-json-4.0.1.jar', '80756674d606438f783b3f98ed12b946fc828db360da79c9b0c5676e8eaefef3', 133959),
+    ('org/apache/groovy/groovy-json/4.0.1/groovy-json-4.0.1.pom', '2aef18586238bbd9c1a0b1c9e56e3c468e3c663a1f0e939d1ee6fafc21f6072b', 22567),
+    ('org/apache/groovy/groovy-templates/4.0.1/groovy-templates-4.0.1.jar', '269acc414e798ed337d6adeecd62b170754f963fd05740992af50da84111481d', 97874),
+    ('org/apache/groovy/groovy-templates/4.0.1/groovy-templates-4.0.1.pom', '59c559841b6df0e5fca8167da8bd31721cede05258d43976db46ff6d4c31849c', 22758),
+    ('org/apache/groovy/groovy-xml/4.0.1/groovy-xml-4.0.1.jar', 'd2dc9d80f668b8eb4186d8d3414085b97835510825b8aa1d93e59256d9a35a22', 233815),
+    ('org/apache/groovy/groovy-xml/4.0.1/groovy-xml-4.0.1.pom', 'e87e2f0967352fa4aa9dff5b39fbcebf6322a13bc5cded4050ee7f4cb39b1434', 22566),
+    ('org/apache/groovy/groovy/4.0.1/groovy-4.0.1.jar', '0bdf0468e45c6a7b793291985c812e29ffbc0a1a87c2534d185875b423b1ae8a', 7367978),
+    ('org/apache/groovy/groovy/4.0.1/groovy-4.0.1.pom', '23cb60a66d344262794612c8c9f112b0a1b551e7edadaf59e89fa53b4217f39e', 24111),
+    ('org/apache/httpcomponents/httpcomponents-core/4.4.15/httpcomponents-core-4.4.15.pom', '60d43727a6174804c8ae17f93e9cc632e47f3c4110a4c54b9fafc8cd9a8ca509', 13160),
+    ('org/apache/httpcomponents/httpcore/4.4.15/httpcore-4.4.15.jar', '3cbaed088c499a10f96dde58f39dc0e7985171abd88138ca1655a872011bb142', 328324),
+    ('org/apache/httpcomponents/httpcore/4.4.15/httpcore-4.4.15.pom', '29acfeaa8a88bb620fc34371a30b3d40328dc5a79cc74902cf446c0943c1be6b', 4967),
+    ('org/apache/maven/doxia/doxia-core/1.11.1/doxia-core-1.11.1.jar', 'd79801594566bdd7168b1adf927c3cc40cf17a95dd4480b4151e45eb30128cd7', 218021),
+    ('org/apache/maven/doxia/doxia-core/1.11.1/doxia-core-1.11.1.pom', 'd22567378e3481adfa8d06ee2a6e882533c2c270c5b8653f1c159fd2de05b168', 4526),
+    ('org/apache/maven/doxia/doxia-decoration-model/1.11.1/doxia-decoration-model-1.11.1.jar', '411fc167774f2e3573f280c57a278fbe7bae677ee596a8ad24bd6c6bb2c5bbce', 59774),
+    ('org/apache/maven/doxia/doxia-decoration-model/1.11.1/doxia-decoration-model-1.11.1.pom', 'fd2040e074d6b00c595562c7fc8117f4d378038aa0c5c2bc8fb84c2b8e6246fb', 3405),
+    ('org/apache/maven/doxia/doxia-integration-tools/1.11.1/doxia-integration-tools-1.11.1.jar', 'eee789dcb86f37f290c6c22198ea56bf529edf21590294e549a77a490ed21dbe', 46741),
+    ('org/apache/maven/doxia/doxia-integration-tools/1.11.1/doxia-integration-tools-1.11.1.pom', '1ad03814f59e835fbe6ba81d214b7f27cc6a8a688ac80791c2baa036ca53ec12', 6040),
+    ('org/apache/maven/doxia/doxia-logging-api/1.11.1/doxia-logging-api-1.11.1.jar', '243c66f842cd2b3ded7c6d2c36b177a65c3f5d94800cef988ba3e29ec8cf60c9', 11731),
+    ('org/apache/maven/doxia/doxia-logging-api/1.11.1/doxia-logging-api-1.11.1.pom', '89001fcd98d29ab1c3102b14e7ddf5a3eb8cc3fce38558b485772bfc694c8600', 1582),
+    ('org/apache/maven/doxia/doxia-module-xhtml/1.11.1/doxia-module-xhtml-1.11.1.jar', '3d298e2da1e11dba952cf4e5d750fafc41713470767b57c4f6969123c0892a23', 17380),
+    ('org/apache/maven/doxia/doxia-module-xhtml/1.11.1/doxia-module-xhtml-1.11.1.pom', '9613c4b89005fa005c0f57e37a5b4129a345f55250ef951cdca1b4deb3d9336b', 1978),
+    ('org/apache/maven/doxia/doxia-module-xhtml5/1.11.1/doxia-module-xhtml5-1.11.1.jar', '3583ae17f9ae97db41da038dc67552a386e7a9f850f45fa6fdb0d2b9ef36a31c', 17848),
+    ('org/apache/maven/doxia/doxia-module-xhtml5/1.11.1/doxia-module-xhtml5-1.11.1.pom', 'a322ee9d8b5b300f337994c710be006dd8b05f2d83e07a9bef64c2530ac9282b', 1984),
+    ('org/apache/maven/doxia/doxia-modules/1.11.1/doxia-modules-1.11.1.pom', 'd6c12f3529a45ec1a757455267d3ec450af1a7e72b53ccc19e1452611b806866', 2742),
+    ('org/apache/maven/doxia/doxia-sink-api/1.11.1/doxia-sink-api-1.11.1.jar', '39ac38bb7d752ea003be17a0065522e4e1b076a4f7e374bea55259f3e133f28f', 11610),
+    ('org/apache/maven/doxia/doxia-sink-api/1.11.1/doxia-sink-api-1.11.1.pom', '780f9b25ba1a38ef6494f32236a59f1ba5b5298724ab4ff3419e9aa3195b9858', 1577),
+    ('org/apache/maven/doxia/doxia-site-renderer/1.11.1/doxia-site-renderer-1.11.1.jar', 'f279a087910d3e0728daad9114da8f3211cfb49b5e8457d05ee9ee5f04284527', 65181),
+    ('org/apache/maven/doxia/doxia-site-renderer/1.11.1/doxia-site-renderer-1.11.1.pom', 'bd9ac2f023c8fbf7fc2ab00cee25dffbc18249870ce0da2ec46ba6689066184f', 7695),
+    ('org/apache/maven/doxia/doxia-sitetools/1.11.1/doxia-sitetools-1.11.1.pom', '1ee7c5b411e6c91b70a19683ef96ac6fd273f9323d3f4a396e201949f48aa748', 13594),
+    ('org/apache/maven/doxia/doxia-skin-model/1.11.1/doxia-skin-model-1.11.1.jar', '5337efbe45413d24b71422d145062f84bde96271dab9f3a5caa3fab461974bf4', 16330),
+    ('org/apache/maven/doxia/doxia-skin-model/1.11.1/doxia-skin-model-1.11.1.pom', '358009924c031e858910e19dcfee1eddb9c352add9e3172e09a06f2afdcbf201', 3038),
+    ('org/apache/maven/doxia/doxia/1.11.1/doxia-1.11.1.pom', '784c41e3398c840f01d755a8abb1049c708caff55820ef68eb65719be8feabba', 18034),
+    ('org/apache/maven/enforcer/enforcer-api/3.0.0/enforcer-api-3.0.0.jar', '3258e5611ebbbf47a3b8f7b65572205f9f6ec24450de420e7e878cd6b40e8b82', 11616),
+    ('org/apache/maven/enforcer/enforcer-api/3.0.0/enforcer-api-3.0.0.pom', '17a91aedc7beeac1756e48d97e30d928a3774374a6507ad5399f2cc9cf1930c7', 3033),
+    ('org/apache/maven/enforcer/enforcer-rules/3.0.0/enforcer-rules-3.0.0.jar', 'f6f02a03f8b3034d9bf337040ac140a39b591366fc69ed66edb66f83eae102da', 115625),
+    ('org/apache/maven/enforcer/enforcer-rules/3.0.0/enforcer-rules-3.0.0.pom', '40a53a82124c2f1e6f03c2296e833f008f63838386d17ba51db654be0ba8af5b', 4666),
+    ('org/apache/maven/enforcer/enforcer/3.0.0/enforcer-3.0.0.pom', 'c0f5b32d1e1724842c826955b7b6356aeb68c56d79695b907b609e2926aee187', 8688),
+    ('org/apache/maven/maven-aether-provider/3.2.5/maven-aether-provider-3.2.5.jar', '703944b922d5351aad53b842f7dd38439b7213425f13c6c7f034b8b699b7d578', 65761),
+    ('org/apache/maven/maven-aether-provider/3.2.5/maven-aether-provider-3.2.5.pom', '317d515c5c69278a980c6219901d327efb4210ca44ae1f07c2a304d487ec7cae', 4250),
+    ('org/apache/maven/maven-archiver/3.5.2/maven-archiver-3.5.2.jar', '8d0a075ba6662041287b6807a8ea14b66b5e1b7da7db96ea322849672c536ca2', 26163),
+    ('org/apache/maven/maven-archiver/3.5.2/maven-archiver-3.5.2.pom', '437e59037792c8c7300666f720b2fc44e069e3161b8f1a331e1c755ef6f6965e', 5545),
+    ('org/apache/maven/maven-artifact/2.0.2/maven-artifact-2.0.2.jar', 'eb23083642d881e60d258dd558c6d7b642f1fa98398cb247363ae84c04d4c09b', 78487),
+    ('org/apache/maven/maven-artifact/2.0.5/maven-artifact-2.0.5.jar', '56be50e4d55c1f114a71fbc62e052140baaa26fc4239ee6cb21ba22c99020605', 85436),
+    ('org/apache/maven/maven-artifact/3.2.5/maven-artifact-3.2.5.jar', '270385907ecfbcb256fe5afb883869fd57a5c021b5242693743ef787605c6335', 55092),
+    ('org/apache/maven/maven-artifact/3.2.5/maven-artifact-3.2.5.pom', '4e7f1161d5e955492198699b47a413ae1059e9ba187de2970a75aa655a8cfd21', 2348),
+    ('org/apache/maven/maven-artifact/3.8.5/maven-artifact-3.8.5.jar', '91172bc294d6eab02fc9f45f4ea01fd0e418962d128cf489abea7b6957d988ee', 58077),
+    ('org/apache/maven/maven-artifact/3.8.5/maven-artifact-3.8.5.pom', '176b9c417beb35fe5d815df91f62f1ac6cbe969a4423447caac8fc0bb9233d5e', 2394),
+    ('org/apache/maven/maven-builder-support/3.8.5/maven-builder-support-3.8.5.jar', 'a205eaa76609ae0039bf38fe9a9c024c646eded05d176effbef524f04a2c2761', 14298),
+    ('org/apache/maven/maven-builder-support/3.8.5/maven-builder-support-3.8.5.pom', 'a20dac121cae54398dd765c08d60f7196e78a8f34c8d43e3a057a72cc2e673c8', 1404),
+    ('org/apache/maven/maven-compat/3.1.1/maven-compat-3.1.1.pom', '1677cf1da32b7a90b23488222ad9aed80aaf02d23f4f983c9662950dd318ce39', 4003),
+    ('org/apache/maven/maven-core/3.2.5/maven-core-3.2.5.jar', '4f1a0af8997e1daf778b91c5ae9e973f92df699439d909fdec7fc6055c09de12', 608173),
+    ('org/apache/maven/maven-core/3.2.5/maven-core-3.2.5.pom', '88ffe6ab7548bda1a711d434a67cfb1599bfb38497f65b36d106a6e98f6eb955', 8063),
+    ('org/apache/maven/maven-core/3.8.5/maven-core-3.8.5.jar', 'c0d7e09f5342ce596c4a7fd3d1345442161ac6ea91505ee66ca7131c92f458e7', 640981),
+    ('org/apache/maven/maven-core/3.8.5/maven-core-3.8.5.pom', '3b3ca819222a1c180bdd12561a85f388b1a9bddacf855067ce1abf570bd2a4d0', 7577),
+    ('org/apache/maven/maven-model-builder/3.2.5/maven-model-builder-3.2.5.jar', 'cc5321269d080ad6694458f53186be5391a21c488ab3a7d6dd73123c7681879d', 170179),
+    ('org/apache/maven/maven-model-builder/3.2.5/maven-model-builder-3.2.5.pom', 'ebf1341d424e9faa3e8d02c5e91a30868be6583ecb753c72208634f5c05f0738', 2993),
+    ('org/apache/maven/maven-model-builder/3.8.5/maven-model-builder-3.8.5.jar', '6bcd688b4700bc0d9046c531c316e75674f53b345d4432d6a7f62812b2424bef', 195825),
+    ('org/apache/maven/maven-model-builder/3.8.5/maven-model-builder-3.8.5.pom', '7d2f6796dda1aed02f95482f95909adb5a5b11dd49adcfc975ffc1efc66949bf', 3389),
+    ('org/apache/maven/maven-model/2.0.5/maven-model-2.0.5.jar', '53e8017a6e8d9eec2a726587e431d3ce9dc736f818d4f3c584249635594edd93', 86474),
+    ('org/apache/maven/maven-model/3.2.5/maven-model-3.2.5.jar', '8d439cc1661349dab1c69eed0f831336d187e162cc6d68aa4deefcff57ee0624', 160786),
+    ('org/apache/maven/maven-model/3.2.5/maven-model-3.2.5.pom', 'b789b821c0b7a436d9dc4c167c1947188a18194c7d41ed5e59b0f5db3dbaaca9', 4247),
+    ('org/apache/maven/maven-model/3.8.5/maven-model-3.8.5.jar', '7c9eeb30ac1941ea9bdf76c08c162ed98c005913e5bff66de3f1027a304546dc', 215280),
+    ('org/apache/maven/maven-model/3.8.5/maven-model-3.8.5.pom', '13ff9eaa42b9618527488a7e985c93a2fffe9b8abfcea210dafcff45a1f5252d', 2803),
+    ('org/apache/maven/maven-parent/35/maven-parent-35.pom', 'd2edd4077c0abc9cc8202883c459503180424636cb39a83031ec1112394b2576', 45258),
+    ('org/apache/maven/maven-plugin-api/2.0.6/maven-plugin-api-2.0.6.jar', 'a1b54bbe38d25ccd3179c5563156b3b0c0ecd014647c3ebaeba8e92b2e2e5053', 12860),
+    ('org/apache/maven/maven-plugin-api/3.2.5/maven-plugin-api-3.2.5.jar', '194a6f0ce889ed3b0d8a9bc4d3c79541e878098b7e303e4ac76c1031850772c3', 46108),
+    ('org/apache/maven/maven-plugin-api/3.2.5/maven-plugin-api-3.2.5.pom', '2c3ba62ee26ffc694cfb2fc6132e4ccd7b4acf553aa86d9143dc0f77822f68ec', 3027),
+    ('org/apache/maven/maven-plugin-api/3.8.5/maven-plugin-api-3.8.5.jar', '73993a34481563bf7612d9a987e180260461a9a49cd4c6e36ade941e351e07c4', 46965),
+    ('org/apache/maven/maven-plugin-api/3.8.5/maven-plugin-api-3.8.5.pom', '8437ea53b37cb3c71356a44179312288ac81e5b3ec77d77044be25aeb3e97063', 3038),
+    ('org/apache/maven/maven-repository-metadata/2.0.2/maven-repository-metadata-2.0.2.jar', 'd033d8cb402ded41b2716b67fad71ed22b2fa6fa4a35fc709e6fb079752eb2e9', 19698),
+    ('org/apache/maven/maven-repository-metadata/3.2.5/maven-repository-metadata-3.2.5.jar', '62b517b77f24edebdee0e382ecddb44bb6632b7c08c528d625aed7d2980df12b', 25962),
+    ('org/apache/maven/maven-repository-metadata/3.2.5/maven-repository-metadata-3.2.5.pom', '171c98a1e2a5a2445b0ddd83ee15cb53122b82c44bec045fd00d817c72948b1e', 2229),
+    ('org/apache/maven/maven-repository-metadata/3.8.5/maven-repository-metadata-3.8.5.jar', '24d89a1b23dc0427ac67895a741802fd23897bdf135d87fe586d718b38a3e924', 28416),
+    ('org/apache/maven/maven-repository-metadata/3.8.5/maven-repository-metadata-3.8.5.pom', 'f91c8eded36bbc82fce7e05fcf12306b567a1d91195013cdf72590374a505c38', 2116),
+    ('org/apache/maven/maven-resolver-provider/3.8.5/maven-resolver-provider-3.8.5.jar', '4b9f827efb393696431978dc0354651f1a95d4c52ba07c92d830efe5dc9b1012', 67173),
+    ('org/apache/maven/maven-resolver-provider/3.8.5/maven-resolver-provider-3.8.5.pom', '90104b876d7b73e65595ca74b7d10c205ce1b102d70db2c1bdb8e801caea3f3c', 4222),
+    ('org/apache/maven/maven-settings-builder/3.2.5/maven-settings-builder-3.2.5.jar', '9c5a014ceb8abb55e997dcc41d17bbe0ae145db574be6b7186e75950c241269f', 43652),
+    ('org/apache/maven/maven-settings-builder/3.2.5/maven-settings-builder-3.2.5.pom', 'c1837d6691e39a614c9179bbafaa2c4327457763cf71ffd8f67b7f81ce3084eb', 2596),
+    ('org/apache/maven/maven-settings-builder/3.8.5/maven-settings-builder-3.8.5.jar', '4c76c80dbbee50c55d1863d6dc58ccf8417bf0c4292c739a834914b69c1f6173', 42066),
+    ('org/apache/maven/maven-settings-builder/3.8.5/maven-settings-builder-3.8.5.pom', 'e709135a68fef7b756234dd1e5358431662e0267c92a28ec2ff4940fa444923a', 2540),
+    ('org/apache/maven/maven-settings/3.2.5/maven-settings-3.2.5.jar', '1874d4ee660b935675a60bdb2ef63e0ff5a81769f4fc04a035fa9d4c4e238224', 43033),
+    ('org/apache/maven/maven-settings/3.2.5/maven-settings-3.2.5.pom', '244564951300444c0c4c4a1a3f870756a110cb9a40405aed4ceccc3e33f5182f', 2171),
+    ('org/apache/maven/maven-settings/3.8.5/maven-settings-3.8.5.jar', 'c8aca7d768cf6a79b562fe3bc09bdb21e4bca6aa3710d10f4a97b0a9ec47ba7f', 44286),
+    ('org/apache/maven/maven-settings/3.8.5/maven-settings-3.8.5.pom', '4e94ea3752f2402827963bb1044a6189d5f508cd7c34df5e7055dd3c724bb691', 1891),
+    ('org/apache/maven/maven/3.2.5/maven-3.2.5.pom', '75f8135d0a9ae8d63c3553f2eaefe25f1b0a01d7676e07f561835b95a88aedf5', 22371),
+    ('org/apache/maven/maven/3.8.5/maven-3.8.5.pom', '62cfa52d5364d21e7cfff6b5e0bff1b8ce264ed362b0a64abb162cff1dc19073', 26998),
+    ('org/apache/maven/plugins/maven-clean-plugin/3.2.0/maven-clean-plugin-3.2.0.jar', 'b657bef2e1eb11e029a70cd688bde6adad29e4e99dacb18516bf651ecca32435', 35678),
+    ('org/apache/maven/plugins/maven-clean-plugin/3.2.0/maven-clean-plugin-3.2.0.pom', '5b25a527e8b437d0e1bc0e589b435652c59a63eb3600f8333032abda6b11b376', 5309),
+    ('org/apache/maven/plugins/maven-compiler-plugin/3.10.1/maven-compiler-plugin-3.10.1.jar', 'b3e3e296bb87acfa4ce979188c9f0c5e6ecebe31753762b437ec6a46063f7b4c', 61899),
+    ('org/apache/maven/plugins/maven-compiler-plugin/3.10.1/maven-compiler-plugin-3.10.1.pom', '51c9a3a11ef9e5ef34523a517495442584bca7acdf12e94f30324d77deaa8717', 12614),
+    ('org/apache/maven/plugins/maven-dependency-plugin/3.3.0/maven-dependency-plugin-3.3.0.jar', '23790badf79051d0cba0f6500cc54a14fe188da8180e6cc6c92bcd373e684c50', 187273),
+    ('org/apache/maven/plugins/maven-dependency-plugin/3.3.0/maven-dependency-plugin-3.3.0.pom', 'e6015adc477339b7e4d1dc12a3e626d4063c124fbbdcc690cfe906e0ba436eb1', 16211),
+    ('org/apache/maven/plugins/maven-enforcer-plugin/3.0.0/maven-enforcer-plugin-3.0.0.jar', '5c93d666d912c0fada5f4ef957d7aa7154eadbefea513e82819dd9063a1a5661', 27117),
+    ('org/apache/maven/plugins/maven-enforcer-plugin/3.0.0/maven-enforcer-plugin-3.0.0.pom', '5d23f79484401611682f1159dd90fce4aecfd1b17905fc44f407555ec4985a55', 7657),
+    ('org/apache/maven/plugins/maven-jar-plugin/3.2.2/maven-jar-plugin-3.2.2.jar', 'faaef64ec5713a8dab6d47fd39356f2c9bcfe15f88ac4392e525c4f259b00f29', 28772),
+    ('org/apache/maven/plugins/maven-jar-plugin/3.2.2/maven-jar-plugin-3.2.2.pom', 'a29f9eaab5514b7e5b8ddd229e6d6b61755810a74751367ca1d479d1bd6a451f', 7478),
+    ('org/apache/maven/plugins/maven-javadoc-plugin/3.4.0/maven-javadoc-plugin-3.4.0.jar', '6bb2b05516d4b3fe33a5c2e5dae14a38c66583acc6b103371735be27c6acd53b', 521085),
+    ('org/apache/maven/plugins/maven-javadoc-plugin/3.4.0/maven-javadoc-plugin-3.4.0.pom', '53f3ced7cf0f83cd8ea85fb78536fa8aa881f0630710e31aa14c51baab7418c9', 21694),
+    ('org/apache/maven/plugins/maven-plugins/35/maven-plugins-35.pom', '42d759c550d723373ae34556e80930b9ed2e13495dace134adf99e64ddc8d2e1', 9902),
+    ('org/apache/maven/plugins/maven-pmd-plugin/3.16.0/maven-pmd-plugin-3.16.0.jar', '3a82a8302760be518c8c908435738a41d1bb4185e317794bf0b59df301520f79', 150691),
+    ('org/apache/maven/plugins/maven-pmd-plugin/3.16.0/maven-pmd-plugin-3.16.0.pom', '9252297068e493b8bb2345d5368bfeead9c78910670ed7f6cfb33f141c18d370', 13353),
+    ('org/apache/maven/plugins/maven-shade-plugin/3.3.0/maven-shade-plugin-3.3.0.jar', '918b898d4a7754161532dd088ee70bc711546191eb80cf44653b214b7bc1b0c3', 140653),
+    ('org/apache/maven/plugins/maven-shade-plugin/3.3.0/maven-shade-plugin-3.3.0.pom', '3ce45d6afedb6441da9cac95d0ce1a30e3baa8559cb7dd14d0dc4144da43f7c2', 13016),
+    ('org/apache/maven/plugins/maven-surefire-plugin/3.0.0-M6/maven-surefire-plugin-3.0.0-M6.jar', 'dae142c1708e1e57e1cae3b6189100c3b952a969b72c2a61c7606475bf5ede15', 44200),
+    ('org/apache/maven/plugins/maven-surefire-plugin/3.0.0-M6/maven-surefire-plugin-3.0.0-M6.pom', '0e8d58f0087e928366615633b71493092494b39b916c2c22ec8888f40ec699dc', 7215),
+    ('org/apache/maven/reporting/maven-reporting-api/3.1.0/maven-reporting-api-3.1.0.jar', 'cccda88e45f5360713f0005384c1fa786bca8335310c818a8e94be4ea19cf00d', 10556),
+    ('org/apache/maven/reporting/maven-reporting-api/3.1.0/maven-reporting-api-3.1.0.pom', '51890c95e76678446989fc0b5fb46546ed5782fab4dd814846fa47e2f1c7f70e', 3764),
+    ('org/apache/maven/reporting/maven-reporting-impl/3.1.0/maven-reporting-impl-3.1.0.jar', '82256d8ffe0ad73899a8860cf2c91a305ee30e8376943450266d563bc53b1218', 18687),
+    ('org/apache/maven/reporting/maven-reporting-impl/3.1.0/maven-reporting-impl-3.1.0.pom', '6e7e5eccf991c0ad1403b2d8ef9057bd59af5523cd31b317fc9da17ce4367b0a', 7167),
+    ('org/apache/maven/resolver/maven-resolver-api/1.6.1/maven-resolver-api-1.6.1.jar', 'ce56f9c499067b13c71e047b8d7b26b4e0f115f3de428f152acde77272f66969', 149089),
+    ('org/apache/maven/resolver/maven-resolver-api/1.6.1/maven-resolver-api-1.6.1.pom', '28af9cc36f64ac025e9f94d2431d2ee601b188dd5cbb9b08f7f2935e5f568429', 2630),
+    ('org/apache/maven/resolver/maven-resolver-util/1.6.1/maven-resolver-util-1.6.1.jar', '76c57724e9889d172da17cb78e2c17f0f194e0209387ffd99a169c90812dca9a', 168478),
+    ('org/apache/maven/resolver/maven-resolver-util/1.6.1/maven-resolver-util-1.6.1.pom', 'a46307c09001d5ad3be3c74ded497577d069b1504e68dffb0f921acd17155201', 2809),
+    ('org/apache/maven/resolver/maven-resolver/1.6.1/maven-resolver-1.6.1.pom', '5ee28ff564fb0a5871bb85db5c37301b184a7f00a882a8ba5ecec69f8803f3d5', 19024),
+    ('org/apache/maven/shared/maven-dependency-analyzer/1.12.0/maven-dependency-analyzer-1.12.0.jar', 'aeb48f4560c7086bbdb1dcb0ae24241f8c27c4b3000d502f7a5eb32731ba5813', 37227),
+    ('org/apache/maven/shared/maven-dependency-analyzer/1.12.0/maven-dependency-analyzer-1.12.0.pom', 'f97895a0f2e54758dadd10c734e46f16b52b7d15fa208056574572580ab36c40', 7164),
+    ('org/apache/maven/shared/maven-dependency-tree/3.1.0/maven-dependency-tree-3.1.0.jar', 'd0e2bd3e0625d5d55226dcac0276fcb6ad59f8d993078a30003d67c7043ae7d9', 103057),
+    ('org/apache/maven/shared/maven-dependency-tree/3.1.0/maven-dependency-tree-3.1.0.pom', '7a6978786a5a60d04f382356a86987de67e82e603ecd8f0b16dce1257101615b', 6925),
+    ('org/apache/maven/surefire/maven-surefire-common/3.0.0-M6/maven-surefire-common-3.0.0-M6.jar', '61d5cce04b238d1b9dbde8eebd3daac9c67b3a4e2da9fba8c47ca3e324297315', 306706),
+    ('org/apache/maven/surefire/maven-surefire-common/3.0.0-M6/maven-surefire-common-3.0.0-M6.pom', '2a5b90e8f9f7a53a5df7117517e2fbee9e5c23d7b0213f23c3f16ba73f458279', 6470),
+    ('org/apache/maven/surefire/surefire-api/3.0.0-M6/surefire-api-3.0.0-M6.jar', '2c36aaaf947769150d9f779a9232a67a83b6f0fe33015479c243f7dee56b6d46', 166869),
+    ('org/apache/maven/surefire/surefire-api/3.0.0-M6/surefire-api-3.0.0-M6.pom', '8f4cf3f14e915b170988feace56f528c5fa296566503af5f7b5d822ef1f59bc1', 3390),
+    ('org/apache/maven/surefire/surefire-booter/3.0.0-M6/surefire-booter-3.0.0-M6.jar', 'd4b62bec61874b0e4ba26830d3284ce5850f4b515e8ec42c5095457c9c41136e', 117539),
+    ('org/apache/maven/surefire/surefire-booter/3.0.0-M6/surefire-booter-3.0.0-M6.pom', 'a839ad365b712e30c481d2777a9abb7146febe9d06494b3dc5b1ff3ece5a0454', 4718),
+    ('org/apache/maven/surefire/surefire-extensions-api/3.0.0-M6/surefire-extensions-api-3.0.0-M6.jar', '6a9aa81caca9b800e859706b718f3ea5382ed1114fd626322a12b9cc29c67d99', 25829),
+    ('org/apache/maven/surefire/surefire-extensions-api/3.0.0-M6/surefire-extensions-api-3.0.0-M6.pom', 'a4a038bdf5b5d30a3d217c905e99048a3c1490e2c6b4bb42b24c89cbc9af882a', 4065),
+    ('org/apache/maven/surefire/surefire-extensions-spi/3.0.0-M6/surefire-extensions-spi-3.0.0-M6.jar', 'bc1a80054e53cd69a2b441927cdd373b2e6b18430de9b3e80abe73f701f2a4bf', 8060),
+    ('org/apache/maven/surefire/surefire-extensions-spi/3.0.0-M6/surefire-extensions-spi-3.0.0-M6.pom', '10718a2fa2ca212fea34ad2420d22ab8930010fb76547bc0b6d3888194fc6ea2', 1798),
+    ('org/apache/maven/surefire/surefire-logger-api/3.0.0-M6/surefire-logger-api-3.0.0-M6.jar', '9b979475868bc17fe45b5cebf3dc3968728c594cdc58cc43ccfff5577c9a8f58', 13647),
+    ('org/apache/maven/surefire/surefire-logger-api/3.0.0-M6/surefire-logger-api-3.0.0-M6.pom', 'fae852cc2f17875ca12bf7d2e3ac23fef1cf9f65b83382e1ca5c6feeedcdc1f1', 3695),
+    ('org/apache/maven/surefire/surefire-shared-utils/3.0.0-M6/surefire-shared-utils-3.0.0-M6.jar', '3d833e41a542ed8b55c13b6c8c294fa1ac7f7fd3b0004bed09ba9cd4939c67a6', 2145437),
+    ('org/apache/maven/surefire/surefire-shared-utils/3.0.0-M6/surefire-shared-utils-3.0.0-M6.pom', '40d820c4d10beed9ae1160694a252f19a3d054078d6be10cfc9c52fb15b1faed', 4291),
+    ('org/apache/maven/surefire/surefire/3.0.0-M6/surefire-3.0.0-M6.pom', '73a9025a655503593f1da138afba2e2442b9647be9804777395d77a202ed6f93', 22928),
+    ('org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar', 'b509448ac506d607319f182537f0b35d71007582ec741832a1f111e5b5b70b38', 6806),
+    ('org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.pom', '32355081d109095c3d5d374d5a43b4f4c1b75d549e983ef50723e2772e5302a0', 1526),
+    ('org/codehaus/plexus/plexus-archiver/4.2.7/plexus-archiver-4.2.7.jar', '5e0c49de4c56a25aa242e2de2b5fea1c0368826c2a8ab73764a0c91d3631633b', 194855),
+    ('org/codehaus/plexus/plexus-archiver/4.2.7/plexus-archiver-4.2.7.pom', '2f8d25a75154d59d3469484320e254f5cc863b8255e470c1a1eb8898ff5ae821', 4911),
+    ('org/codehaus/plexus/plexus-classworlds/2.5.2/plexus-classworlds-2.5.2.jar', 'b2931d41740490a8d931cbe0cfe9ac20deb66cca606e679f52522f7f534c9fd7', 52684),
+    ('org/codehaus/plexus/plexus-compiler-api/2.11.1/plexus-compiler-api-2.11.1.jar', '1acf6b9fd806e35485849fc4c950ae2ccc13c791cd3e5e0709178190429ef811', 26939),
+    ('org/codehaus/plexus/plexus-compiler-api/2.11.1/plexus-compiler-api-2.11.1.pom', '0c4f9eb20fe43c5326b3ff2c6d2ff1dff51461bd0b1e3e8d3b832246653b2399', 1057),
+    ('org/codehaus/plexus/plexus-compiler-javac/2.11.1/plexus-compiler-javac-2.11.1.jar', '00d2df9af03a2f12dea7ed4e28ae273bde22f047d8ab64f8ebbacc1f7d0c0006', 22842),
+    ('org/codehaus/plexus/plexus-compiler-javac/2.11.1/plexus-compiler-javac-2.11.1.pom', 'fb47dc1c7bef12a46f016da1390b61e2c09df56994b80f346c655380b0685a8b', 1204),
+    ('org/codehaus/plexus/plexus-compiler-manager/2.11.1/plexus-compiler-manager-2.11.1.jar', '94f67cf4b368fe8c76d7b13da298d2d177ed01b93ce035fd0c4118c5765970cb', 4654),
+    ('org/codehaus/plexus/plexus-compiler-manager/2.11.1/plexus-compiler-manager-2.11.1.pom', 'a332b274926ea1854f24c0d6052a4b5179dda8e5ef21b3ce8084b7a59846305e', 1138),
+    ('org/codehaus/plexus/plexus-compiler/2.11.1/plexus-compiler-2.11.1.pom', 'd1baa1eba6a03b869495f1c2ca0d86bd5149c767e25375b2ef7aef1a867ef199', 8119),
+    ('org/codehaus/plexus/plexus-compilers/2.11.1/plexus-compilers-2.11.1.pom', '15ac066316272cb32470db81b658ec85524a6da4313131a892baa2f4fbe2d1d4', 1323),
+    ('org/codehaus/plexus/plexus-component-annotations/2.1.1/plexus-component-annotations-2.1.1.jar', '623711b3db0d3c6beaaf22578aea8b2706baee8b26ea328dfe94d96cbe2835dd', 4102),
+    ('org/codehaus/plexus/plexus-component-annotations/2.1.1/plexus-component-annotations-2.1.1.pom', '2389d533bb8e0bc90f45016342cf8af9ec80caa28b44922a91ebcccceef8a51d', 770),
+    ('org/codehaus/plexus/plexus-components/6.5/plexus-components-6.5.pom', 'c616f9be007c09888f66985b6dc982087220efbb930e7957edcba4f875429430', 2692),
+    ('org/codehaus/plexus/plexus-container-default/2.1.1/plexus-container-default-2.1.1.jar', '8b65840e41ca669a1a69ec1daedb3426304e560b24172cc93bb02e8c199e1ce7', 228336),
+    ('org/codehaus/plexus/plexus-container-default/2.1.1/plexus-container-default-2.1.1.pom', '0f5c6e592459262fc34942c2f4df370230ec2765dd4b707f54c269fdf5c5a7e3', 2926),
+    ('org/codehaus/plexus/plexus-containers/2.1.1/plexus-containers-2.1.1.pom', 'c129ae94bc6de8ba2596fcdad4b3fcfe4f67640a4cb6d76a5540182214aa833c', 6037),
+    ('org/codehaus/plexus/plexus-interactivity-api/1.1/plexus-interactivity-api-1.1.jar', '26f701c674180dc5535ed8d7bb4a48e4ed6d4b6a97703420383cd31557c6cdeb', 9384),
+    ('org/codehaus/plexus/plexus-interactivity-api/1.1/plexus-interactivity-api-1.1.pom', '7fc95f5fc5876313729c407d85cb803e6e005bbe32f5f39757cc81ff5746c95f', 823),
+    ('org/codehaus/plexus/plexus-interactivity/1.1/plexus-interactivity-1.1.pom', '6511b83e0b3abee46b11da94c666c32818fbeb654809352647b5c0cc8122349b', 1730),
+    ('org/codehaus/plexus/plexus-interpolation/1.16/plexus-interpolation-1.16.jar', 'bc4053a078ec83523a010c321c0d6852b43ddc4e076a6500b8bc133b6c69e561', 61308),
+    ('org/codehaus/plexus/plexus-interpolation/1.21/plexus-interpolation-1.21.jar', 'aba7980581027ad5fc74a27ee4d64aad74932fdb32694967242d03fc50290d1f', 62458),
+    ('org/codehaus/plexus/plexus-interpolation/1.21/plexus-interpolation-1.21.pom', 'e078ac8780c6f2da5c11c5d2164bf2c2262112a89a82884de9c9886333267f7d', 1540),
+    ('org/codehaus/plexus/plexus-java/1.1.0/plexus-java-1.1.0.jar', 'fcdbb5d4ae15f320e772f369456818fd2fa2af487ba112efbc6ad8a9ee121b3a', 52825),
+    ('org/codehaus/plexus/plexus-java/1.1.0/plexus-java-1.1.0.pom', 'f0e59119c7c090364ebb90d1c82b268bbe4a1b3969b2771790e18106258d2025', 5138),
+    ('org/codehaus/plexus/plexus-java/1.1.1/plexus-java-1.1.1.jar', 'cb4f7ae0344534332d724b4587ffb1e05efa62fdf144ae9f24d0f56fdbb587b9', 53784),
+    ('org/codehaus/plexus/plexus-java/1.1.1/plexus-java-1.1.1.pom', 'c8c2424f1924c93944038c3c840e3d6659d10af3f563123de63582ab5f2e088d', 4971),
+    ('org/codehaus/plexus/plexus-languages/1.1.0/plexus-languages-1.1.0.pom', 'f206529a3afba6a47b3bc19ac2b2a82d98cda5e38b57ee784d97ef9e6c08c693', 4759),
+    ('org/codehaus/plexus/plexus-languages/1.1.1/plexus-languages-1.1.1.pom', 'baf16816ce7542f1052268e741248e32f5522bfbd5bb66ac2ae04ae5e28639c8', 4614),
+    ('org/codehaus/plexus/plexus-utils/3.3.1/plexus-utils-3.3.1.jar', '4b570fcdbe5a894f249d2eb9b929358a9c88c3e548d227a80010461930222f2a', 262026),
+    ('org/codehaus/plexus/plexus-utils/3.3.1/plexus-utils-3.3.1.pom', '5e583878df905b5f33a230ef690a52b8f19dab9cc892bedee069f3d8af4e960a', 5342),
+    ('org/codehaus/plexus/plexus/6.5/plexus-6.5.pom', '737ff2200498dd54c920712404caa4426d38639d05014ff3ef1b3e7c5bd91397', 25713),
+    ('org/eclipse/aether/aether-api/1.0.0.v20140518/aether-api-1.0.0.v20140518.jar', '84b98521684ab22f9528470fa6d8ab68a230e1b211623c989ba7016c306eb773', 136299),
+    ('org/eclipse/aether/aether-api/1.0.0.v20140518/aether-api-1.0.0.v20140518.pom', '2cbb6b666dd1518153afd4939b126c2336506cf3b1bc4541263c09ba87c34b96', 1896),
+    ('org/eclipse/aether/aether-impl/1.0.0.v20140518/aether-impl-1.0.0.v20140518.jar', '9a9b60e685385225f08e662cb9f60d96610b0987f0f47bbf3f0c92df8a897d00', 171738),
+    ('org/eclipse/aether/aether-impl/1.0.0.v20140518/aether-impl-1.0.0.v20140518.pom', '5a80a73241d6cf2e982688b0fe0dacd238d920d81d84fa9435d6d2dd595184e4', 3473),
+    ('org/eclipse/aether/aether-spi/1.0.0.v20140518/aether-spi-1.0.0.v20140518.jar', 'a3266d127a4e9f4aa9c4fa0986e31eec784e866f79112e1840d1667e17c10fb2', 30731),
+    ('org/eclipse/aether/aether-spi/1.0.0.v20140518/aether-spi-1.0.0.v20140518.pom', '7d547087459c89b8717ec5081aa45922d605299da39e32a811041db1b7e2514e', 2052),
+    ('org/eclipse/aether/aether-util/1.0.0.v20140518/aether-util-1.0.0.v20140518.jar', 'aff0951639837c4e3a4699a421fa79f410032f603f5c6a5bba435e98531f3984', 145829),
+    ('org/eclipse/aether/aether-util/1.0.0.v20140518/aether-util-1.0.0.v20140518.pom', '5c8b507a80901fcdaef89f50c639176b516e8866c6bf07be1ab8ab9da5a4877f', 2194),
+    ('org/eclipse/aether/aether-util/1.1.0/aether-util-1.1.0.jar', '556f083dd35fe7f430ac4a7705784191e39df6df89abc31b30cb538f53828d62', 149584),
+    ('org/eclipse/aether/aether-util/1.1.0/aether-util-1.1.0.pom', '386b937b7cc9e9ff85685cf21184db282731df5073a6112756964a759f9c2797', 2112),
+    ('org/eclipse/aether/aether/1.0.0.v20140518/aether-1.0.0.v20140518.pom', '606b5fa03b171d8204aac0fbace11ee28e71175a0f869bd45f09c9319e7e88dc', 30152),
+    ('org/eclipse/aether/aether/1.1.0/aether-1.1.0.pom', '487acb194677ffc094f801334fccc7167193b288753381176242e26ecbd5ac8e', 25816),
+    ('org/eclipse/sisu/org.eclipse.sisu.inject/0.3.0.M1/org.eclipse.sisu.inject-0.3.0.M1.jar', '3a878482877e66337ab8461e7f55ab9d701f8090f889ad8938cceefa33193fe4', 340185),
+    ('org/eclipse/sisu/org.eclipse.sisu.inject/0.3.0.M1/org.eclipse.sisu.inject-0.3.0.M1.pom', 'd95ec995e81b6fb0dfe1f70c31652ecd270c7195ba452c2e75e27a112a81754f', 2550),
+    ('org/eclipse/sisu/org.eclipse.sisu.plexus/0.3.0.M1/org.eclipse.sisu.plexus-0.3.0.M1.jar', '35b545ead7e5513ec8c4974a984659ec68738e6761bb7c08a9876a2e901d38ae', 200559),
+    ('org/eclipse/sisu/org.eclipse.sisu.plexus/0.3.0.M1/org.eclipse.sisu.plexus-0.3.0.M1.pom', '68121f46f0f1212e411378abb65c675bc362343101cc9da6a8936f3d3ea083fa', 4706),
+    ('org/eclipse/sisu/sisu-inject/0.3.0.M1/sisu-inject-0.3.0.M1.pom', 'f505692eed1855fa9ec6974661bb3c036c4947dea9ecc3fe9fec37edf07e3429', 14293),
+    ('org/eclipse/sisu/sisu-plexus/0.3.0.M1/sisu-plexus-0.3.0.M1.pom', '180e15a18091d7adcb13bbb77362bf9280aa94dac10c63c5f64ebb573e64c489', 13248),
+    ('org/jacoco/jacoco-maven-plugin/0.8.8/jacoco-maven-plugin-0.8.8.jar', '53903560c1814f49df8cd1c03fb5bf249d24d236215770bff747b2dfe6be406a', 55910),
+    ('org/jacoco/jacoco-maven-plugin/0.8.8/jacoco-maven-plugin-0.8.8.pom', 'b80f26e1bc6cf4f84f9d8d7ada6275cc83efcfb1f1297967558804c5a1fea423', 3787),
+    ('org/jacoco/org.jacoco.agent/0.8.8/org.jacoco.agent-0.8.8-runtime.jar', '67de51e9ca1db044f3a3d10613518befb02e8eee1015f2ff6d56cfb9d4506546', 292790),
+    ('org/jacoco/org.jacoco.agent/0.8.8/org.jacoco.agent-0.8.8.pom', '7dd13c80aff315032983357c650a887d6fdb4c8a8870b207bb4802c49809e7b4', 3502),
+    ('org/jacoco/org.jacoco.build/0.8.8/org.jacoco.build-0.8.8.pom', 'f4ce0b1285fd24fc6c772f42857298315904dde8fd5677267a0fad5ff9ce2aef', 43559),
+    ('org/jacoco/org.jacoco.core/0.8.8/org.jacoco.core-0.8.8.jar', '474c782f809d88924713dfdbf0acb79d330f904be576484803463d0465611643', 202533),
+    ('org/jacoco/org.jacoco.core/0.8.8/org.jacoco.core-0.8.8.pom', 'f5fab5a48df823b83c0ea35026032368cc9b81800efb257cc7a5928298fee225', 2084),
+    ('org/jacoco/org.jacoco.report/0.8.8/org.jacoco.report-0.8.8.jar', '2c129110f3e3fcaa1f8179578ea3894586199cb0826be5c7790278084c9622a9', 128884),
+    ('org/jacoco/org.jacoco.report/0.8.8/org.jacoco.report-0.8.8.pom', '5213af2916bb2690be871917d82a0f9c2ba1e88b796a59343fc03df8ae138716', 1882),
+    ('org/jboss/weld/weld-parent/26/weld-parent-26.pom', '13023471418b890557b982e4cbab2b5f6967adf1cebe54bf630fe201a63963cc', 32327),
+    ('org/jdom/jdom2/2.0.6.1/jdom2-2.0.6.1.jar', '0b20f45e3a0fd8f0d12cdc5316b06776e902b1365db00118876f9175c60f302c', 327806),
+    ('org/jdom/jdom2/2.0.6.1/jdom2-2.0.6.1.pom', '55795e1018b8ae647b937967cf810a99b08582c2374e7873c128734c8c914bf3', 4600),
+    ('org/junit/junit-bom/5.8.2/junit-bom-5.8.2.pom', '836069ca9e8ee3c56e48376222da291263f137bd3fd16d84fdd47efcc3f286e2', 5630),
+    ('org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar', '1808ee87e0f718cd6e25f3b75afc17956ac8a3edc48c7e9bab9f19f9a79e3801', 193500),
+    ('org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.pom', 'c9bde3622795b30a773531e85c5832f8dc8aa77ecdd313eee235c983cbfd0277', 3181),
+    ('org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar', '753b7726cdd158bb34cedb94c161e2291896f47832a1e9eda53d970020a8184e', 229678),
+    ('org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.pom', '0a4b7dd94baf9c5fbb65a2e9173d085228bd0024213648025ad067024f1c66bb', 3199),
+    ('org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar', 'd1c22d6fe5483568c08c8913f34abd2303490c3480ce6c18a2ea31c65e44102a', 577338),
+    ('org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.pom', 'b469e01017017d85bc025225302052fa45cf2b59f9415842473946b4fa49c7c6', 3007),
+    ('org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar', '4f5c1cc6432244cd16e36aa0e02b74bce34a81ff95a13d63d50951ec4ce3f4bd', 6363),
+    ('org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.pom', '43f56273e7acf33e0f5b5d1079c7ffa424531f01e2794a9d6473adfd10a45d2e', 3200),
+    ('org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar', 'd2e015fca7130e79af2f4608dc54415e4b10b592d77333decb4b1a274c185050', 100450),
+    ('org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.pom', 'ce852e34c6a184aa6c80ee8df0471713a7408134134f08e3c1c3dd87c6b59ab7', 2831),
+    ('org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar', '0b7d000f8c3e8e5f7d6b819649936e7b9938314e87c8f983805218ea57567e59', 185762),
+    ('org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.pom', '0168643266060ed928ef5a81823003ecfae79a9a8c0bbfd76f4201c6c9d771c5', 3202),
+    ('org/mozilla/rhino/1.7.14/rhino-1.7.14.jar', 'c9290b0d801bf0dbbbc44338e0f769b7650a0c5d04e6bb1aeb85775c0211b003', 1383644),
+    ('org/mozilla/rhino/1.7.14/rhino-1.7.14.pom', '946022832cfb8265cec1eb1bf3e18657fb061281ee375f179572df32053af812', 1342),
+    ('org/ow2/asm/asm-analysis/9.3/asm-analysis-9.3.pom', '1e06851b797c372a11cd242ffb8c9781061519209a00e07654ecfae7efaf42af', 2619),
+    ('org/ow2/asm/asm-commons/9.3/asm-commons-9.3.pom', 'f513cda953a33e5f234e21a988b9edffe9254177685b73c63f1cb44aae55e7f3', 2960),
+    ('org/ow2/asm/asm-tree/9.3/asm-tree-9.3.pom', 'c799cae423fb2f85e47ebe18d69d1b9e1fbb11d8e2730f3546870a771f0012c4', 2590),
+    ('org/ow2/asm/asm-util/9.3/asm-util-9.3.pom', 'b8fe7815d2a0b5d5ac12ce67bbceeef172567f6743b7db7bd47cd99f123d9939', 2936),
+    ('org/ow2/asm/asm/9.3/asm-9.3.pom', '8eac07e29f8aea83a8156d7b29fa368f6ebf3becfb209c9a1ac36abd906123e0', 2368),
+    ('org/slf4j/jcl-over-slf4j/1.7.36/jcl-over-slf4j-1.7.36.jar', 'ab57ca8fd223772c17365d121f59e94ecbf0ae59d08c03a3cb5b81071c019195', 16555),
+    ('org/slf4j/jcl-over-slf4j/1.7.36/jcl-over-slf4j-1.7.36.pom', 'bd96243d7d4218cd7cc7d45c0e30fa13480a1a4f91d356edd7dfe93f1ffb68e6', 1181),
+    ('org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar', '18c4a0095d5c1da6b817592e767bb23d29dd2f560ad74df75ff3961dbde25b79', 41203),
+    ('org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar', 'd3ef575e3e4979678dc01bf1dcce51021493b4d11fb7f1be8ad982877c16a1c0', 41125),
+    ('org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.pom', 'fb046a9c229437928bb11c2d27c8b5d773eb8a25e60cbd253d985210dedc2684', 2743),
+    ('org/slf4j/slf4j-parent/1.7.36/slf4j-parent-1.7.36.pom', 'bb388d37fbcdd3cde64c3cede21838693218dc451f04040c5df360a78ed7e812', 14093),
+    ('org/slf4j/slf4j-simple/1.7.36/slf4j-simple-1.7.36.jar', '2f39bed943d624dfa8f4102d0571283a10870b6aa36f197a8a506f147010c10f', 15333),
+    ('org/slf4j/slf4j-simple/1.7.36/slf4j-simple-1.7.36.pom', 'c56b80a0a6bea2a0463e70d0892ae338a9e507e486767a520453409812058d1b', 1021),
+    ('org/sonatype/forge/forge-parent/38/forge-parent-38.pom', 'a406af6d1f345158b4d37c0f80bc6ba7c2b1da7cd34d1be9ef118d5fe00f020f', 18740),
+    ('org/sonatype/sisu/inject/guice-parent/3.2.3/guice-parent-3.2.3.pom', '5aa8d98b590478df88a349bd1dbe11d0620bfe2bdf11c4e52d51b27fe31d6168', 13473),
+    ('org/sonatype/sisu/sisu-guice/3.2.3/sisu-guice-3.2.3-no_aop.jar', '004af7012b6d11ab585ae841130ff091dcad6531d7bf13db4d7deac91589eef4', 397831),
+    ('org/sonatype/sisu/sisu-guice/3.2.3/sisu-guice-3.2.3.pom', '4a14ec03fa5fdfef34b595d3fabb83832423a5d6e9b31571e44c8a48304014df', 10936),
+    ('org/vafer/jdependency/2.7.0/jdependency-2.7.0.jar', 'd63efd5746ff408943a7dd7ef85ae9f09aa7fb63bb2b16911427ce6c45b59fd0', 232670),
+    ('org/vafer/jdependency/2.7.0/jdependency-2.7.0.pom', 'eb24422b0a3e9e87d5ac6ea8087786fb51c4b1bbe0d225ef752152c736a204d0', 13891),
+    ('org/xmlresolver/xmlresolver/4.2.0/xmlresolver-4.2.0-data.jar', '0d2395c0811910ddaff0df08626d6f5bffa3de3e8e699bc93e561d6509d9e53e', 1027759),
+    ('org/xmlresolver/xmlresolver/4.2.0/xmlresolver-4.2.0.jar', '734f37f9e43124ea4a9ce09f754ffd095167822cbe68e9244f17db02a2f9e11f', 150259),
+    ('org/xmlresolver/xmlresolver/4.2.0/xmlresolver-4.2.0.pom', 'c2eb0bc5a745eaa7307ad25e9ad06307bcf196929b018642c9325f9de7e7c30e', 2248),
+    ('xml-apis/xml-apis/1.4.01/xml-apis-1.4.01.jar', 'a840968176645684bb01aed376e067ab39614885f9eee44abe35a5f20ebe7fad', 220536),
+    ('xml-apis/xml-apis/1.4.01/xml-apis-1.4.01.pom', '09a82ff150ac86bfa31145e0a6afd89a02e4504785f5da112e4fae1425020e92', 2661),
+]
+
+def fetch(record):
+    relative, digest, size = record
+    with urlopen('https://repo.maven.apache.org/maven2/' + relative, timeout=120) as response:
+        content = response.read()
+    assert len(content) == size and sha256(content).hexdigest() == digest, relative
+    path = repository / relative
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(content)
+    return path
+
+with ThreadPoolExecutor(max_workers=6) as pool:
+    paths = list(pool.map(fetch, artifacts))
+for path in paths:
+    with (path.parent / '_remote.repositories').open('a') as origin:
+        origin.write(path.name + '>central=\n')
+PY

@@ -6,7 +6,7 @@
   "repo_url": "https://github.com/ninia/jep.git",
   "base_commit": "9eeb14c4c8b2d0e49feece90a6e330826b49c7dd",
   "fix_commit": "d14567567ac1281e978790b9170c981113de282f",
-  "image": "yutu0814/javac-case-093-jep:benchmark-v3",
+  "image": "yutu0814/clb.eval.x86_64.clb-java-c-093@sha256:4ac5cee19d541869db19dc060db7ea23928c001afff67ef8655bca0ba7607015",
   "python_version": "3.5.1",
   "python_sha256": "unused-centos7-anaconda",
   "extra_apt_packages": [],
